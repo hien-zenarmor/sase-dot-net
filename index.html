@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SASE.net is a field guide to Secure Access Service Edge, covering how unified network security converges networking and security at the edge for distributed organizations.">
+  <meta name="theme-color" content="#06121b">
+  <title>SASE.net — A Field Guide to Unified Network Security</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css?v=20260804">
+  <script src="script.js?v=20260804" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============================================================ HEADER -->
+  <header class="site-header" data-header>
+    <a class="brand" href="#top" aria-label="SASE.Net home">
+      <span class="brand-mark">S/</span><span class="brand-word">SASE.NET</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span class="sr-only">Menu</span>
+    </button>
+    <nav id="site-nav" aria-label="Primary">
+      <a href="#trust">Trust</a>
+      <a href="#experts">Experts</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#attributes">Attributes</a>
+      <a href="#architecture">Architecture</a>
+      <a class="button button-small" href="#contact">Plan your edge <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ========================================================== HERO -->
+    <section class="hero section-dark" id="top">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="eyebrow reveal"><span class="status-dot"></span> Unified network security at the edge</p>
+        <h1 class="reveal">SASE: Unified Network Security<br><em>for Distributed Organizations.</em></h1>
+        <p class="hero-dek reveal">A SASE solution inspects traffic at the application layer and blocks threats before packets reach internal systems. It deploys directly on your existing edge infrastructure, so a separate appliance never enters the network. Policy updates apply across every branch through a single console, eliminating fragmented rule sets. Some solutions go further, keeping enforcement entirely on your own infrastructure instead of routing traffic through a vendor's cloud.</p>
+        <div class="hero-actions reveal">
+          <a class="button" href="#contact">Design your SASE <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href="#trust">Read the field guide <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <div class="hero-scroll reveal" aria-hidden="true"><span></span>SCROLL</div>
+    </section>
+
+    <!-- ========================================================== TRUST ELEMENTS -->
+    <section class="trust section-light" id="trust" data-step="01">
+      <p class="section-kicker reveal">Trust elements</p>
+      <div class="section-heading reveal">
+        <h2>Deployment over<br><em>promises.</em></h2>
+        <p>Two formats carry the record. Recorded sessions capture network teams running the firewall inside live environments. Written reviews come from architects who approved the edge deployment.</p>
+      </div>
+
+      <div class="trust-pair">
+        <article class="trust-card reveal" tabindex="0">
+          <span class="trust-index">01</span>
+          <h3>SASE testimonials</h3>
+          <p class="trust-lede">Written accounts from security architects, network leads, and chief information security officers.</p>
+          <div class="trust-info">
+            <p>Each written review names the operating context: headcount, site count, cloud mix, and the stack that was replaced, so the claim can be weighed against a comparable environment instead of read as a slogan.</p>
+            <span class="trust-info-tag">Hover or focus to read</span>
+          </div>
+        </article>
+        <article class="trust-card trust-card-accent reveal" tabindex="0">
+          <span class="trust-index">02</span>
+          <h3>Video reviews</h3>
+          <p class="trust-lede">Recorded walkthroughs of live policy, routing, and rollout decisions.</p>
+          <div class="trust-info">
+            <p>Video reviews show the console, the policy model, and the failure cases. Every recording is timestamped to the migration phase it describes, so the footage matches the maturity of the deployment being discussed.</p>
+            <span class="trust-info-tag">Hover or focus to read</span>
+          </div>
+        </article>
+      </div>
+
+      <p class="section-note reveal">Evidence gains value through comparison. Reviews below are grouped by the starting problem: backhaul latency, VPN sprawl, inconsistent branch policy, or unmanaged SaaS access. Grouping bypasses a simple vendor satisfaction score.</p>
+
+      <div class="testimonial-grid">
+        <blockquote class="reveal">
+          <span>01 / Managed service provider</span>
+          <p>“Policy control finally lives in one console instead of four dashboards.”</p>
+          <footer>Network operations lead</footer>
+        </blockquote>
+        <blockquote class="reveal">
+          <span>02 / Financial services</span>
+          <p>“Rule changes reach every branch the same afternoon they get approved.”</p>
+          <footer>Security architect</footer>
+        </blockquote>
+        <blockquote class="reveal">
+          <span>03 / Health technology</span>
+          <p>“Traffic inspection stopped requiring a separate box on the rack.”</p>
+          <footer>Infrastructure manager</footer>
+        </blockquote>
+        <blockquote class="reveal">
+          <span>04 / Manufacturing</span>
+          <p>“Migration off the legacy filter took a weekend, not a quarter.”</p>
+          <footer>IT director</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ========================================================== EXPERTS -->
+    <section class="experts section-dark" id="experts" data-step="02">
+      <p class="section-kicker reveal">SASE specialists</p>
+      <div class="section-heading reveal">
+        <h2>Shared expertise.<br><em>One operating model.</em></h2>
+        <p>SASE management is a shared discipline. Network engineers, security architects, threat researchers, and migration specialists maintain one operating model. Each group contributes a distinct layer of the deployment, from packet inspection rules to rollout timing.</p>
+      </div>
+
+      <div class="team-grid">
+        <article class="team-card reveal" tabindex="0">
+          <div class="team-portrait" aria-hidden="true"><b>SA</b><i>01</i></div>
+          <h3>Firewall architecture</h3>
+          <p class="team-role">Identity, policy, applications</p>
+          <div class="team-bio">
+            <p>Fifteen years translating access policy into enforceable rules. Leads the identity, posture, and least-privilege model that decides which application a verified session may reach.</p>
+            <ul><li>Identity</li><li>Policy</li><li>Applications</li></ul>
+          </div>
+        </article>
+        <article class="team-card reveal" tabindex="0">
+          <div class="team-portrait" aria-hidden="true"><b>NE</b><i>02</i></div>
+          <h3>Network engineering</h3>
+          <p class="team-role">Routing, backhaul, deployment</p>
+          <div class="team-bio">
+            <p>Eleven years routing traffic across branch offices, data centers, and cloud workloads. Leads the edge deployment model that decides how each packet is inspected closest to where it originates.</p>
+            <ul><li>Routing</li><li>Backhaul</li><li>Deployment</li></ul>
+          </div>
+        </article>
+        <article class="team-card reveal" tabindex="0">
+          <div class="team-portrait" aria-hidden="true"><b>TR</b><i>03</i></div>
+          <h3>Threat intelligence</h3>
+          <p class="team-role">Signatures, detection, research</p>
+          <div class="team-bio">
+            <p>Nine years tracking emerging attack patterns across live network traffic. Leads the signature research process that decides which behavior triggers an inspection alert.</p>
+            <ul><li>Signatures</li><li>Detection</li><li>Research</li></ul>
+          </div>
+        </article>
+        <article class="team-card reveal" tabindex="0">
+          <div class="team-portrait" aria-hidden="true"><b>MS</b><i>04</i></div>
+          <h3>Managed services</h3>
+          <p class="team-role">Multi-tenant, partner rollout, scale</p>
+          <div class="team-bio">
+            <p>Eight years helping managed service providers (MSPs) scale edge security across distributed client networks. Leads the multi-tenant deployment model that lets partners manage hundreds of deployments from a single console.</p>
+            <ul><li>Multi-tenant</li><li>Partner rollout</li><li>Scale</li></ul>
+          </div>
+        </article>
+      </div>
+
+      <div class="stat-grid">
+        <article class="stat-card reveal">
+          <strong>&lt;20<small>ms</small></strong>
+          <span>Target edge latency</span>
+          <button class="info-icon" type="button" aria-expanded="false" aria-label="About target edge latency">i</button>
+          <div class="stat-info" role="note">Median added latency measured from client to nearest point of presence during single-pass inspection. Illustrative placeholder pending verified measurement.</div>
+        </article>
+        <article class="stat-card reveal">
+          <strong>1</strong>
+          <span>Single console</span>
+          <button class="info-icon" type="button" aria-expanded="false" aria-label="About the single console">i</button>
+          <div class="stat-info" role="note">Count of management interfaces required to view or edit policy across each connected branch. Illustrative placeholder pending verified measurement.</div>
+        </article>
+        <article class="stat-card reveal">
+          <strong>24/7</strong>
+          <span>Engineering support</span>
+          <button class="info-icon" type="button" aria-expanded="false" aria-label="About engineering support">i</button>
+          <div class="stat-info" role="note">Follow-the-sun coverage across three regions, with escalation into the engineering team that owns the affected service. Illustrative placeholder pending verified measurement.</div>
+        </article>
+        <article class="stat-card reveal">
+          <strong>1</strong>
+          <span>Control plane</span>
+          <button class="info-icon" type="button" aria-expanded="false" aria-label="About the control plane">i</button>
+          <div class="stat-info" role="note">One place to express intent for networking and security, compiled and distributed to every edge without per-site translation. Illustrative placeholder pending verified measurement.</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ========================================================== BENEFITS -->
+    <section class="benefits section-light" id="benefits" data-step="03">
+      <p class="section-kicker reveal">Benefits of SASE</p>
+      <div class="section-heading reveal">
+        <h2>What are the<br><em>benefits of SASE?</em></h2>
+        <p>Organizations that converge networking and security into a single edge-delivered platform gain measurable improvements in protection, performance, and cost efficiency across distributed networks.</p>
+      </div>
+
+      <div class="benefit-stage">
+        <figure class="benefit-visual reveal" data-benefit-visual>
+          <div class="benefit-visual-head"><span data-visual-index>01</span><span data-visual-tag>Consolidation</span></div>
+          <div class="benefit-visual-body" data-visual-body></div>
+          <figcaption data-visual-caption>Replace chained appliances with one policy plane.</figcaption>
+        </figure>
+
+        <div class="benefit-list reveal" data-benefit-list>
+          <article class="benefit-item is-open" data-benefit="01" data-tag="Consistency" data-caption="Apply one policy engine across every user, device, and location." data-nodes="6" data-shape="converge">
+            <h3><button type="button" aria-expanded="true"><span class="benefit-num">01</span><span class="benefit-name">Consistent security policies</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Uniform security rules apply across users, devices, and locations simultaneously through one policy engine. Branch offices, remote workers, and cloud applications receive identical protection standards under a single configuration.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="02" data-tag="Uniformity" data-caption="One rule set, evaluated identically at every edge." data-nodes="8" data-shape="ring">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">02</span><span class="benefit-name">Zero Trust integration</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Identity and context are verified continuously for every access request, inside or outside the network. Device posture, user behavior, and location are checked before application access is granted.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="03" data-tag="Latency" data-caption="Inspect at the nearest healthy point of presence." data-nodes="5" data-shape="path">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">03</span><span class="benefit-name">Full data visibility</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Discover and protect sensitive data moving toward cloud applications to prevent accidental leaks. Data Loss Prevention rules travel with the policy engine across SaaS platforms.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="04" data-tag="Least privilege" data-caption="Grant one application, not the whole network." data-nodes="4" data-shape="gate">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">04</span><span class="benefit-name">Reduced attack surface</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Internal corporate applications stay hidden from the public internet. Attackers scanning for open ports find nothing exposed because access routes through identity verification first.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="05" data-tag="Telemetry" data-caption="One identity-attributed record across every service." data-nodes="7" data-shape="stack">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">05</span><span class="benefit-name">Lower latency</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Some SASE solutions route user traffic directly toward nearby cloud gateways, avoiding backhaul through a central corporate data center. Distributed models go further by inspecting traffic inline at the edge device itself, removing the detour entirely.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="06" data-tag="Response" data-caption="Shared context shortens the investigation." data-nodes="6" data-shape="pulse">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">06</span><span class="benefit-name">Centralized management</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Networking and security consolidate into one management console. Policy changes propagate across all connected sites, eliminating manual configuration on separate appliances.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="07" data-tag="Scale" data-caption="Add capacity without a procurement cycle." data-nodes="9" data-shape="ring">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">07</span><span class="benefit-name">Improved cloud performance</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Some SASE solutions offer direct cloud on-ramps that optimize traffic toward major cloud platforms and SaaS applications. Others achieve similar results by inspecting locally and sending traffic directly to its destination, cutting delay caused by legacy data-center routing paths.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="08" data-tag="Cost" data-caption="Retire the products the edge makes redundant." data-nodes="5" data-shape="converge">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">08</span><span class="benefit-name">Lower capital costs</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Subscription-based pricing replaces upfront spending on physical firewalls and routers at each branch, reducing purchase, deployment, and maintenance costs.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="09" data-tag="Assurance" data-caption="Evidence produced as a by-product of enforcement." data-nodes="6" data-shape="stack">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">09</span><span class="benefit-name">Streamlined vendor management</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Consolidating networking and security tools into one platform reduces the number of contracts, support tickets, and point products an IT team must manage.</p></div>
+          </article>
+          <article class="benefit-item" data-benefit="10" data-tag="Velocity" data-caption="A new site inherits policy on day one." data-nodes="7" data-shape="path">
+            <h3><button type="button" aria-expanded="false"><span class="benefit-num">10</span><span class="benefit-name">Scalability</span><span class="benefit-chevron" aria-hidden="true"></span></button></h3>
+            <div class="benefit-body"><p>Organizations add branch locations and onboard remote workers through software configuration, skipping the lead time tied to shipping and installing physical hardware.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== HOW TO USE SASE -->
+    <section class="how section-muted" id="how" data-step="04">
+      <p class="section-kicker reveal">How to use SASE</p>
+      <div class="section-heading reveal">
+        <h2>Use SASE in<br><em>five clear steps.</em></h2>
+        <p>Assess the current estate, select the right service model, migrate identity first, extend inspection across web and cloud traffic, then consolidate policy and monitoring into one plane.</p>
+      </div>
+
+      <div class="how-row">
+        <div class="how-diagram reveal" aria-hidden="true">
+          <svg viewBox="0 0 200 200" role="presentation">
+            <path d="M100 12 188 100 100 188 12 100Z" class="how-diamond-outer"/>
+            <path d="M100 44 156 100 100 156 44 100Z" class="how-diamond-inner"/>
+            <path d="M100 12v176M12 100h176" class="how-diamond-cross"/>
+            <circle cx="100" cy="100" r="13" class="how-diamond-core"/>
+            <circle class="how-diamond-packet" r="4">
+              <animateMotion path="M100 44L156 100L100 156L44 100Z" dur="7s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <span>One policy plane</span>
+        </div>
+        <article class="how-card reveal">
+          <b>02</b>
+          <h3>Assess current infrastructure</h3>
+          <p>Document appliances, traffic patterns, and access policies before migration begins.</p>
+        </article>
+        <article class="how-card reveal">
+          <b>03</b>
+          <h3>Select the service model</h3>
+          <p>Match the model to organizational scale, coverage requirements, and identity sources.</p>
+        </article>
+        <article class="how-card reveal">
+          <b>04</b>
+          <h3>Migrate identity and access</h3>
+          <p>Replace static permissions with zero-trust policies at the application level.</p>
+        </article>
+        <article class="how-card reveal">
+          <b>05</b>
+          <h3>Extend inspection and consolidate</h3>
+          <p>Activate web gateway, cloud access broker, and data loss prevention together, then retire fragmented consoles as the unified policy engine takes over.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ========================================================== CORE ATTRIBUTES -->
+    <section class="attributes section-dark" id="attributes" data-step="05">
+      <p class="section-kicker reveal">Core attributes of SASE</p>
+      <div class="section-heading reveal">
+        <h2>What are the core<br><em>attributes of SASE?</em></h2>
+        <p>Networking and security functions operate within a single framework, whether cloud-delivered or distributed across your own infrastructure. Each attribute addresses a gap left by perimeter-based security, from identity verification and traffic inspection to policy enforcement and global scalability.</p>
+      </div>
+
+      <div class="attribute-stage reveal">
+        <div class="attribute-rail" role="tablist" aria-orientation="vertical" aria-label="Core attributes of SASE">
+          <button role="tab" id="attr-tab-01" aria-controls="attr-panel-01" aria-selected="true"  data-attribute="01">Zero trust network access</button>
+          <button role="tab" id="attr-tab-02" aria-controls="attr-panel-02" aria-selected="false" data-attribute="02" tabindex="-1">Identity-based access control</button>
+          <button role="tab" id="attr-tab-03" aria-controls="attr-panel-03" aria-selected="false" data-attribute="03" tabindex="-1">Secure web gateway</button>
+          <button role="tab" id="attr-tab-04" aria-controls="attr-panel-04" aria-selected="false" data-attribute="04" tabindex="-1">Cloud access security broker</button>
+          <button role="tab" id="attr-tab-05" aria-controls="attr-panel-05" aria-selected="false" data-attribute="05" tabindex="-1">Firewall as a service</button>
+          <button role="tab" id="attr-tab-06" aria-controls="attr-panel-06" aria-selected="false" data-attribute="06" tabindex="-1">Data loss prevention</button>
+          <button role="tab" id="attr-tab-07" aria-controls="attr-panel-07" aria-selected="false" data-attribute="07" tabindex="-1">Threat intelligence and real-time detection</button>
+          <button role="tab" id="attr-tab-08" aria-controls="attr-panel-08" aria-selected="false" data-attribute="08" tabindex="-1">Unified policy engine</button>
+          <button role="tab" id="attr-tab-09" aria-controls="attr-panel-09" aria-selected="false" data-attribute="09" tabindex="-1">End-to-end visibility</button>
+          <button role="tab" id="attr-tab-10" aria-controls="attr-panel-10" aria-selected="false" data-attribute="10" tabindex="-1">Performance optimization</button>
+          <button role="tab" id="attr-tab-11" aria-controls="attr-panel-11" aria-selected="false" data-attribute="11" tabindex="-1">Scalability and global reach</button>
+          <button role="tab" id="attr-tab-12" aria-controls="attr-panel-12" aria-selected="false" data-attribute="12" tabindex="-1">Cloud-native architecture</button>
+          <button role="tab" id="attr-tab-13" aria-controls="attr-panel-13" aria-selected="false" data-attribute="13" tabindex="-1">Consistent security for all edges</button>
+          <button role="tab" id="attr-tab-14" aria-controls="attr-panel-14" aria-selected="false" data-attribute="14" tabindex="-1">Reduced complexity</button>
+        </div>
+
+        <div class="attribute-panels">
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-01" aria-labelledby="attr-tab-01" tabindex="0">
+            <div class="panel-top"><span>Attribute / 01</span><span class="panel-live">Active</span></div>
+            <h3>Zero trust network access</h3>
+            <p>Connect an authenticated user to one specific application after evaluating identity, device posture, location, and risk. Modern distributed models achieve this using peer-to-peer encrypted tunnels instead of routing all traffic through a central gateway. Trust is not granted once at the door; it is reassessed continuously for the life of the session.</p>
+            <div class="panel-flow"><i>Identity</i><b>Verify</b><i>Application</i></div>
+            <div class="panel-tags"><span>Least privilege</span><span>App-level access</span><span>Continuous trust</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Model a ZTNA policy <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-02" aria-labelledby="attr-tab-02" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 02</span><span class="panel-live">Active</span></div>
+            <h3>Identity-based access control</h3>
+            <p>Identity becomes the control point. User, group, role, device posture, and behavioural signals shape every decision, so the same person receives different access from a managed laptop than from an unmanaged tablet.</p>
+            <div class="panel-flow"><i>User</i><b>Evaluate</b><i>Resource</i></div>
+            <div class="panel-tags"><span>Identity context</span><span>Device posture</span><span>Adaptive policy</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Map your identity sources <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-03" aria-labelledby="attr-tab-03" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 03</span><span class="panel-live">Active</span></div>
+            <h3>Secure web gateway</h3>
+            <p>Inspect web traffic close to the user to stop malicious destinations, enforce acceptable use, and protect data without hauling the session back through an appliance in a distant data center.</p>
+            <div class="panel-flow"><i>Request</i><b>Inspect</b><i>Web</i></div>
+            <div class="panel-tags"><span>URL controls</span><span>Malware defence</span><span>TLS inspection</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Review web policy <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-04" aria-labelledby="attr-tab-04" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 04</span><span class="panel-live">Active</span></div>
+            <h3>Cloud access security broker</h3>
+            <p>Discover which cloud applications are actually in use, govern the sanctioned ones, and apply context-aware controls to sensitive actions and data across managed and unmanaged services alike.</p>
+            <div class="panel-flow"><i>User</i><b>Govern</b><i>SaaS</i></div>
+            <div class="panel-tags"><span>SaaS discovery</span><span>Data control</span><span>App governance</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Run a SaaS discovery <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-05" aria-labelledby="attr-tab-05" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 05</span><span class="panel-live">Active</span></div>
+            <h3>Firewall as a service</h3>
+            <p>Deliver stateful firewall and threat-prevention policy from distributed service edges, with one rule set covering users, branches, and cloud workloads instead of a different dialect per site.</p>
+            <div class="panel-flow"><i>Traffic</i><b>Enforce</b><i>Destination</i></div>
+            <div class="panel-tags"><span>IPS</span><span>DNS security</span><span>App control</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Consolidate firewall rules <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-06" aria-labelledby="attr-tab-06" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 06</span><span class="panel-live">Active</span></div>
+            <h3>Data loss prevention</h3>
+            <p>Classify sensitive content and control its movement across web, SaaS, and private applications, on managed and unmanaged devices, using the same definitions everywhere the data can travel.</p>
+            <div class="panel-flow"><i>Content</i><b>Classify</b><i>Action</i></div>
+            <div class="panel-tags"><span>Classification</span><span>Inline policy</span><span>Data context</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Define data policy <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-07" aria-labelledby="attr-tab-07" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 07</span><span class="panel-live">Active</span></div>
+            <h3>Threat intelligence and real-time detection</h3>
+            <p>Enrich every inspection with current reputation, malware, campaign, and behavioural intelligence gathered across the whole edge, so a signal seen in one region protects every other region immediately.</p>
+            <div class="panel-flow"><i>Signal</i><b>Correlate</b><i>Block</i></div>
+            <div class="panel-tags"><span>Global signals</span><span>IOC matching</span><span>Behaviour</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">See the signal pipeline <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-08" aria-labelledby="attr-tab-08" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 08</span><span class="panel-live">Active</span></div>
+            <h3>Unified policy engine</h3>
+            <p>Express security and network intent once, compile it centrally, and distribute it globally with a consistent interpretation at every edge. One change, one review, one history.</p>
+            <div class="panel-flow"><i>Intent</i><b>Compile</b><i>Edge</i></div>
+            <div class="panel-tags"><span>One console</span><span>Policy reuse</span><span>Change history</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Unify your policy model <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-09" aria-labelledby="attr-tab-09" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 09</span><span class="panel-live">Active</span></div>
+            <h3>End-to-end visibility</h3>
+            <p>Correlate user experience, route health, access decisions, threat events, and data movement in one operational view. That is the difference between knowing a session was slow and knowing which hop caused it.</p>
+            <div class="panel-flow"><i>Events</i><b>Correlate</b><i>Insight</i></div>
+            <div class="panel-tags"><span>Unified logs</span><span>Digital experience</span><span>Path insight</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Tour the telemetry <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-10" aria-labelledby="attr-tab-10" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 10</span><span class="panel-live">Active</span></div>
+            <h3>Performance optimization</h3>
+            <p>Choose the best available path by application requirement and live network health, while enforcing full policy at the closest edge. Security and speed stop being a trade the network team has to broker.</p>
+            <div class="panel-flow"><i>Session</i><b>Optimize</b><i>App</i></div>
+            <div class="panel-tags"><span>Smart routing</span><span>QoE signals</span><span>Low latency</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Benchmark a path <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-11" aria-labelledby="attr-tab-11" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 11</span><span class="panel-live">Active</span></div>
+            <h3>Scalability and global reach</h3>
+            <p>Add users, sites, applications, and inspection capacity through software configuration instead of another appliance procurement cycle. Reach becomes a map question, not a logistics question.</p>
+            <div class="panel-flow"><i>Demand</i><b>Scale</b><i>Capacity</i></div>
+            <div class="panel-tags"><span>Elastic edge</span><span>Global reach</span><span>Fast expansion</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Check regional coverage <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-12" aria-labelledby="attr-tab-12" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 12</span><span class="panel-live">Active</span></div>
+            <h3>Cloud-native architecture</h3>
+            <p>Multi-tenant services built for elastic scale and continuous delivery, so new inspection capabilities reach every tenant without a firmware plan, a maintenance window, or a hardware dependency.</p>
+            <div class="panel-flow"><i>Service</i><b>Deliver</b><i>Everywhere</i></div>
+            <div class="panel-tags"><span>Multi-tenant</span><span>Continuous delivery</span><span>No appliances</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Read the service model <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-13" aria-labelledby="attr-tab-13" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 13</span><span class="panel-live">Active</span></div>
+            <h3>Consistent security for all edges</h3>
+            <p>Users, branches, data centers, and cloud workloads are all edges of the same service. Each receives identical enforcement, so protection no longer depends on which door the traffic happened to use.</p>
+            <div class="panel-flow"><i>Any edge</i><b>Same policy</b><i>Any user</i></div>
+            <div class="panel-tags"><span>Uniform enforcement</span><span>No blind spots</span><span>Shared context</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Audit edge parity <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="attribute-panel" role="tabpanel" id="attr-panel-14" aria-labelledby="attr-tab-14" tabindex="0" hidden>
+            <div class="panel-top"><span>Attribute / 14</span><span class="panel-live">Active</span></div>
+            <h3>Reduced complexity</h3>
+            <p>Replace fragmented consoles, overlapping rules, and chained appliances with one architecture, one policy model, and one telemetry plane. Simplicity here is a security control, not a convenience.</p>
+            <div class="panel-flow"><i>Tools</i><b>Converge</b><i>Platform</i></div>
+            <div class="panel-tags"><span>Fewer seams</span><span>Shared context</span><span>Simpler ops</span></div>
+            <div class="panel-cta"><a class="button" href="#contact">Count what you can retire <span aria-hidden="true">↗</span></a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== ARCHITECTURE -->
+    <section class="architecture section-light" id="architecture" data-step="06">
+      <p class="section-kicker reveal">SASE architecture</p>
+      <div class="section-heading reveal">
+        <h2>Thirteen architectural<br><em>decisions.</em></h2>
+        <p>A well-designed SASE architecture rests on thirteen design decisions governing secure access, service edge, and traffic handling across a distributed environment. Each principle covers its definition, importance, benefits, practical use, a distributed approach, and an operator perspective.</p>
+      </div>
+
+      <div class="arch-list" data-arch-list>
+
+        <details class="arch-item reveal" data-arch open>
+          <summary><span class="arch-num">01</span><span class="arch-title">Identity-centric design</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Every access decision begins with a verified identity instead of a network location. The user, the device, and the session context together determine what may be reached. An IP address is evidence of nothing.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Network position stopped correlating with trust</li><li>Users and applications both left the perimeter</li><li>Stolen credentials need a second gate</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Policy travels with the person</li><li>Access survives office, home, and travel</li><li>Revocation is immediate and global</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Consolidate identity providers first</li><li>Attach device posture to every claim</li><li>Express policy in roles, not subnets</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Identity is resolved before the first packet is forwarded, and the resolved claim travels with the session through every subsequent inspection stage instead of being re-derived at each hop.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“Once identity became the anchor, half our firewall rules turned out to be describing office floor plans.”</p><footer>Security architect / Financial services</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal" data-arch>
+          <summary><span class="arch-num">02</span><span class="arch-title">Cloud-native framework</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> The service is built as elastic multi-tenant software, not as virtualised appliances. Capacity, features, and fixes are delivered continuously without a per-site upgrade project.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Appliance refresh cycles gate security</li><li>Capacity planning becomes guesswork</li><li>Patch lag creates uneven protection</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>New controls arrive everywhere at once</li><li>No firmware or maintenance windows</li><li>Capacity follows demand automatically</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Retire hardware on its natural cycle</li><li>Track feature parity, not box count</li><li>Budget as service, not capital</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Every inspection capability ships to all tenants from the same build, so no customer runs a version that is quietly a year behind the threat landscape it is meant to address.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“The upgrade conversation simply disappeared from our quarterly planning.”</p><footer>VP infrastructure / Logistics</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal" data-arch>
+          <summary><span class="arch-num">03</span><span class="arch-title">Distributed points of presence</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Inspection happens at many geographically distributed edges instead of at one or two central chokepoints, so the security control sits close to the person who triggered it.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Backhaul adds avoidable round trips</li><li>Central chokepoints are single failures</li><li>Distance is felt by every user</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Shorter paths to cloud destinations</li><li>Regional failure stays regional</li><li>Consistent experience across markets</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Map users against edge coverage</li><li>Measure before and after cutover</li><li>Prefer nearest healthy, not nearest</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Edge selection weighs live health alongside geographic proximity, so a congested nearby point of presence yields to a slightly more distant one that will actually serve the session faster.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“Our Singapore staff stopped filing tickets about the London data center.”</p><footer>Network operations / Manufacturing</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal" data-arch>
+          <summary><span class="arch-num">04</span><span class="arch-title">Unified security stack</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Web filtering, firewall, access control, threat prevention, and data protection run as one pipeline over a single decode of the traffic, instead of as separate products chained in sequence.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Chained products decrypt repeatedly</li><li>Each hop adds latency and failure</li><li>Context is lost between vendors</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>One decode, many decisions</li><li>Shared context improves accuracy</li><li>Fewer integration seams to defend</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Verify single-pass in evaluation</li><li>Compare latency under full policy</li><li>Ask which engines share context</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Traffic is decrypted and parsed once by a single application running a unified stack. Every security engine then reads from that shared representation, which is why enabling an additional control does not compound the latency budget or require routing to another appliance.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“Turning on DLP used to cost us 40 milliseconds. Now it costs us a checkbox.”</p><footer>Security engineering / Health technology</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">05</span><span class="arch-title">Context-aware access control</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Access decisions weigh live context, including device posture, location, time, sensitivity of the resource, and recent behaviour, instead of resolving a static allow list.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Static rules age badly</li><li>Risk changes mid-session</li><li>One identity, many device states</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Proportionate friction for users</li><li>Automatic response to posture drift</li><li>Fewer standing exceptions</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Grade resources by sensitivity</li><li>Define step-up triggers explicitly</li><li>Review exceptions on a schedule</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Context is re-evaluated during the session, not only at establishment, so a device that falls out of compliance mid-session loses access to sensitive resources without waiting for a re-authentication event.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“Our exception list went from four hundred entries to eleven.”</p><footer>Identity lead / Global retail</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">06</span><span class="arch-title">Integrated networking and security</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Routing decisions and security decisions are made by the same service with the same information, instead of by two teams operating two products that meet only at a ticket.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Split ownership creates blind spots</li><li>Path choice affects enforcement</li><li>Incidents cross both domains</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>One change process end to end</li><li>Routing respects policy intent</li><li>Faster joint troubleshooting</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Merge runbooks before tooling</li><li>Share on-call between teams</li><li>Measure experience and risk together</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Path selection and policy enforcement consult one state model, so a route change can never silently move a session onto a path where a required control is unavailable.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“The network and security bridge calls became one call.”</p><footer>Head of operations / Professional services</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">07</span><span class="arch-title">Global network fabric</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> A private backbone interconnects the points of presence, so traffic between edges rides a measured, managed network instead of taking its chances on the public internet.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Public transit varies hour to hour</li><li>Long-haul jitter breaks real-time apps</li><li>Peering disputes affect users</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Predictable inter-region latency</li><li>Measured, not best-effort, transit</li><li>Deterministic failure behaviour</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Identify cross-region app flows</li><li>Test during regional peak hours</li><li>Compare against current MPLS spend</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Inter-edge transit is continuously measured instead of assumed, and sessions are re-pathed when a segment degrades, before the degradation reaches the threshold a user would notice.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“We retired two MPLS circuits and the call quality went up.”</p><footer>Network architect / Logistics</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">08</span><span class="arch-title">Application-aware routing</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> The service identifies the application behind a flow and routes it according to that application's actual requirements, instead of treating every packet on a port identically.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Port numbers describe little</li><li>Voice and backup want opposite paths</li><li>Encrypted traffic hides intent</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Latency-sensitive apps get priority</li><li>Bulk transfer stops crowding calls</li><li>Policy expressed in app names</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Inventory business-critical apps</li><li>Set explicit path preferences</li><li>Validate with experience metrics</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Application identity is derived from behavioural and metadata signals that survive encryption, so routing intent does not depend on breaking TLS where policy says it should be left intact.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“Backups no longer take the sales team's video calls down with them.”</p><footer>Infrastructure lead / Health technology</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">09</span><span class="arch-title">Edge-based processing</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> The full policy decision (inspection, classification, and enforcement) is executed at the edge the user reached, not referred back to a central authority for adjudication.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Central adjudication adds a round trip</li><li>Control plane outages must not block</li><li>Local decisions scale linearly</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Decisions in single-digit milliseconds</li><li>Edges keep enforcing when isolated</li><li>Throughput scales with edge count</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Test behaviour during partition</li><li>Confirm local logging and buffering</li><li>Check policy propagation time</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Each edge holds a compiled copy of current policy and continues enforcing it if the control plane becomes unreachable, buffering telemetry until the connection is restored.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“A regional outage stopped being a security event and became a reporting delay.”</p><footer>CISO / Manufacturing</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">10</span><span class="arch-title">Encrypted traffic inspection</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Encrypted sessions are inspected selectively and lawfully, with explicit exclusions for categories where inspection is inappropriate, so protection does not stop at the TLS handshake.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Nearly all threats arrive encrypted</li><li>Blanket decryption is unacceptable</li><li>Privacy law constrains inspection</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Threats visible inside TLS</li><li>Health and finance stay excluded</li><li>Defensible, documented exceptions</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Write the exclusion list first</li><li>Involve legal and works councils</li><li>Publish the policy to staff</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Inspection scope is expressed as policy with named exclusions and a change history, so the question "who could read what, and when" has a documented answer instead of a configuration archaeology exercise.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“Our works council approved it because the exclusions were legible.”</p><footer>Data protection officer / Financial services</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">11</span><span class="arch-title">Continuous verification</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Trust is re-established throughout a session instead of granted once at authentication. A session that becomes risky is downgraded or terminated while it is still running.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Sessions outlive their justification</li><li>Tokens get stolen after issue</li><li>Device health changes silently</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Shorter window for stolen sessions</li><li>Posture drift handled automatically</li><li>Step-up only when warranted</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Define risk signals worth acting on</li><li>Set proportionate responses</li><li>Rehearse the termination path</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Risk is scored continuously from device, behavioural, and threat signals; crossing a threshold triggers the response the policy names, from silent logging through step-up to immediate termination.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“The session ended before the analyst finished reading the alert.”</p><footer>SOC manager / Professional services</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">12</span><span class="arch-title">Microsegmentation</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> Workloads and applications are isolated from one another by policy, so that reaching one service confers no ability to reach its neighbours on the same network.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Flat networks amplify one breach</li><li>Lateral movement is the real damage</li><li>VLAN segmentation ages poorly</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>Blast radius bounded by design</li><li>Segmentation follows the workload</li><li>Clear service-to-service intent</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Map real service dependencies</li><li>Start in observe-only mode</li><li>Tighten one tier at a time</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Segments are expressed as workload identity instead of address range, so a service that moves, scales, or is rebuilt keeps its segmentation without anyone editing a subnet table.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“The incident stayed inside one tier. That is the whole story.”</p><footer>Head of security / Global retail</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+        <details class="arch-item reveal is-extra" data-arch>
+          <summary><span class="arch-num">13</span><span class="arch-title">Single policy engine</span><span class="arch-mark" aria-hidden="true"></span></summary>
+          <div class="arch-body">
+            <p class="arch-definition"><b>Definition.</b> One engine interprets one policy language for every control and every edge, removing the translation layer where most real-world security gaps are quietly introduced.</p>
+            <div class="arch-columns">
+              <div class="arch-column"><h4>Why is it important?</h4><ul><li>Translation between products drifts</li><li>Duplicate rules contradict silently</li><li>Audits cannot follow four dialects</li></ul></div>
+              <div class="arch-column"><h4>Benefits</h4><ul><li>One rule, enforced identically</li><li>Change history in one place</li><li>Audit evidence is a single export</li></ul></div>
+              <div class="arch-column"><h4>How to use it</h4><ul><li>Rebuild intent, do not import rules</li><li>Delete what nothing references</li><li>Review policy as code</li></ul></div>
+            </div>
+            <div class="arch-callouts">
+              <article class="arch-approach"><h4>In practice</h4><p>Policy is authored once and compiled to every enforcement point, so there is no per-product dialect in which a rule can mean something subtly different from what its author intended.</p></article>
+              <article class="arch-quote"><h4>Testimonial</h4><blockquote><p>“We found nine rules that cancelled each other out. In one afternoon.”</p><footer>Security architect / Manufacturing</footer></blockquote></article>
+            </div>
+          </div>
+        </details>
+
+      </div>
+
+      <div class="arch-more reveal">
+        <button class="button button-dark" type="button" data-arch-toggle aria-expanded="false">
+          <span data-arch-toggle-label>Show all 13 principles</span> <span aria-hidden="true">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================== CEO QUOTE -->
+    <section class="leader section-dark" id="leadership" data-step="07">
+      <div class="leader-inner reveal">
+        <div class="leader-copy">
+          <p class="section-kicker">From the leadership</p>
+          <blockquote>
+            <p>“Convergence is not a procurement strategy. It is an admission that the network and the security policy were always describing the same system, and that keeping them in separate consoles was a decision we made for the vendors’ convenience instead of our own.”</p>
+          </blockquote>
+          <a class="button" href="#contact">Request the architecture briefing <span aria-hidden="true">↗</span></a>
+        </div>
+        <figure class="leader-figure">
+          <div class="leader-portrait" aria-hidden="true"><span>CEO</span></div>
+          <figcaption><strong>Chief executive officer</strong><span>SASE.Net (placeholder attribution)</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ========================================================== RESOURCE TABS -->
+    <section class="resources section-light" id="resources" data-step="08">
+      <p class="section-kicker reveal">Before you choose</p>
+      <div class="section-heading reveal">
+        <h2>What to know<br><em>before you sign.</em></h2>
+        <p>Understand what a converged edge platform costs, who runs it after deployment, what the organization must inventory first, and how one provider can be distinguished from another.</p>
+      </div>
+
+      <div class="resource-tabs reveal" role="tablist" aria-label="Selection topics">
+        <button role="tab" id="res-tab-pricing" aria-controls="res-panel-pricing" aria-selected="true"  data-resource="pricing">Pricing</button>
+        <button role="tab" id="res-tab-support" aria-controls="res-panel-support" aria-selected="false" data-resource="support" tabindex="-1">Customer support</button>
+        <button role="tab" id="res-tab-know"    aria-controls="res-panel-know"    aria-selected="false" data-resource="know"    tabindex="-1">What to know</button>
+        <button role="tab" id="res-tab-unique"  aria-controls="res-panel-unique"  aria-selected="false" data-resource="unique"  tabindex="-1">Unique sides</button>
+      </div>
+
+      <div class="resource-panel reveal" role="tabpanel" id="res-panel-pricing" aria-labelledby="res-tab-pricing" tabindex="0">
+        <h3>What does it really cost to retire your current stack?</h3>
+        <p class="resource-lede">Retirement cost exceeds the price of a new subscription because hardware disposal, staff migration hours, contract termination, and a parallel-run period all add expense beyond the platform fee.</p>
+        <h4>What costs belong in the comparison?</h4>
+        <p>Compare the new license or subscription, migration labor and professional services, termination obligations, and hardware disposal or redeployment. Each category grows independently of the advertised platform price.</p>
+        <h5>Which cost line do most models forget?</h5>
+        <p>The parallel-run expense. For 60 to 90 days, many organizations pay for the new platform while the old stack remains active so policy and user groups can be moved safely.</p>
+      </div>
+
+      <div class="resource-panel reveal" role="tabpanel" id="res-panel-support" aria-labelledby="res-tab-support" tabindex="0" hidden>
+        <h3>What level of support should you actually expect?</h3>
+        <p class="resource-lede">A reliable SASE provider needs responsive technical assistance, clear ownership, defined escalation, detailed documentation, configuration guidance, incident investigation, and upgrade assistance.</p>
+        <h4>Where does responsibility actually sit?</h4>
+        <p>The customer owns network architecture, access policies, endpoints, business requirements, and internal security decisions. The vendor owns its platform, security services, software updates, and vendor-side troubleshooting; infrastructure providers own their respective services.</p>
+        <h5>What does the escalation path really look like?</h5>
+        <p>Issue identification should progress through increasingly specialized investigation, with defined severity, case ownership, update intervals, evidence requirements, and resolution criteria.</p>
+      </div>
+
+      <div class="resource-panel reveal" role="tabpanel" id="res-panel-know" aria-labelledby="res-tab-know" tabindex="0" hidden>
+        <h3>What should you inventory before you compare vendors?</h3>
+        <p class="resource-lede">Inventory the existing network, security controls, users, applications, devices, connectivity, traffic volumes, policies, authentication methods, compliance requirements, internal skills, contracts, and operational dependencies.</p>
+        <h4>Which assets need a line item?</h4>
+        <p>Identity services, endpoint controls, network policies, DNS, certificates, traffic rules, logging pipelines, WAN dependencies, and application paths each need explicit cost, configuration, ownership, and replacement effort.</p>
+        <h5>Which dependency breaks most migrations?</h5>
+        <p>Identity. Directory mappings, group memberships, service accounts, device posture, application access, certificates, and authentication flows must be validated before traffic policies move.</p>
+      </div>
+
+      <div class="resource-panel reveal" role="tabpanel" id="res-panel-unique" aria-labelledby="res-tab-unique" tabindex="0" hidden>
+        <h3>What differences don't show up on a feature sheet?</h3>
+        <p class="resource-lede">The meaningful differences surface under load, across distance, and during failure: inspection architecture, real coverage near users, migration tooling, identity compatibility, and service levels.</p>
+        <h4>Where does feature parity actually end?</h4>
+        <p>Parity ends when identical features are tested against concurrent user load, geographic distance, encrypted traffic, processing location, and failover behavior in production conditions.</p>
+        <h5>What question separates vendors fast?</h5>
+        <p>Ask which components the provider built and which were acquired or resold. The answer predicts integration quality, console consistency, support experience, and long-term maintenance burden.</p>
+      </div>
+    </section>
+
+
+    <!-- ========================================================== NEWSLETTER -->
+    <section class="newsletter section-cyan" id="contact" data-step="10">
+      <div class="newsletter-inner reveal">
+        <p class="section-kicker">Edge notes</p>
+        <h2>One briefing.<br><em>Every other week.</em></h2>
+        <p class="newsletter-dek">Architecture notes, migration patterns, and the occasional honest post-mortem, written for the people who have to make the policy work on Monday.</p>
+        <form class="newsletter-form" novalidate>
+          <label class="sr-only" for="news-email">Email address</label>
+          <input id="news-email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required>
+          <label class="sr-only" for="news-role">Your role</label>
+          <select id="news-role" name="role" required>
+            <option value="">Choose…</option>
+            <option>Security architecture</option>
+            <option>Network engineering</option>
+            <option>IT leadership</option>
+            <option>Operations</option>
+            <option>Something else</option>
+          </select>
+          <button class="button button-dark" type="submit">Subscribe <span aria-hidden="true">↗</span></button>
+          <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================ FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <a class="brand" href="#top" aria-label="SASE.Net home">
+        <span class="brand-mark">S/</span><span class="brand-word">SASE.NET</span>
+      </a>
+      <p>An editorial, interactive guide to Secure Access Service Edge: how cloud-delivered networking and security converge at the edge.</p>
+    </div>
+    <div class="footer-cols">
+      <nav aria-label="Guide">
+        <h2>Guide</h2>
+        <a href="#trust">Trust elements</a>
+        <a href="#experts">Experts</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#how">How to use SASE</a>
+      </nav>
+      <nav aria-label="Architecture">
+        <h2>Architecture</h2>
+        <a href="#attributes">Core attributes</a>
+        <a href="#architecture">Design principles</a>
+        <a href="#resources">Before you choose</a>
+        <a href="#explore">Reading tracks</a>
+      </nav>
+      <nav aria-label="Project">
+        <h2>Project</h2>
+        <a href="https://github.com/KTG1/sase-net-site" rel="noopener">Repository</a>
+        <a href="https://github.com/KTG1/sase-net-site/blob/main/CONTRIBUTING.md" rel="noopener">Contributing</a>
+        <a href="#contact">Edge notes</a>
+      </nav>
+    </div>
+    <div class="footer-base">
+      <span>© <span data-year>2026</span> SASE.Net</span>
+      <span>Content on this page is illustrative placeholder material.</span>
+    </div>
+  </footer>
+</body>
+</html>
+
+

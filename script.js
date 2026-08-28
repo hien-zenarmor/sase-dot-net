@@ -1,0 +1,300 @@
+/* ============================================================================
+   SASE.Net — homepage behaviour
+   Interactions follow the annotations in example-homepage-zenarmor.drawio.png:
+     · trust elements and team cards reveal information on hover / focus (CSS)
+     · statistics carry an info-icon that opens an explanation
+     · benefit accordion changes the diagram and the text together
+     · core attributes use a locally scrolling rail beside a sticky panel
+     · architecture principles are accordions, four visible until "show all"
+   ========================================================================= */
+
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ------------------------------------------------------------- header --- */
+
+const header = document.querySelector('[data-header]');
+const menuToggle = document.querySelector('.menu-toggle');
+const nav = document.querySelector('#site-nav');
+
+const updateHeader = () => header?.classList.toggle('scrolled', scrollY > 24);
+updateHeader();
+addEventListener('scroll', updateHeader, { passive: true });
+
+menuToggle?.addEventListener('click', () => {
+  const open = menuToggle.getAttribute('aria-expanded') === 'true';
+  menuToggle.setAttribute('aria-expanded', String(!open));
+  nav?.classList.toggle('open', !open);
+});
+
+nav?.addEventListener('click', (event) => {
+  if (!event.target.closest('a')) return;
+  nav.classList.remove('open');
+  menuToggle?.setAttribute('aria-expanded', 'false');
+});
+
+addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape' || !nav?.classList.contains('open')) return;
+  nav.classList.remove('open');
+  menuToggle?.setAttribute('aria-expanded', 'false');
+  menuToggle?.focus();
+});
+
+const year = document.querySelector('[data-year]');
+if (year) year.textContent = String(new Date().getFullYear());
+
+/* --------------------------------------------- statistics / info-icon --- */
+
+document.querySelectorAll('.stat-card .info-icon').forEach((button) => {
+  const card = button.closest('.stat-card');
+  button.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    document.querySelectorAll('.stat-card').forEach((other) => {
+      other.classList.remove('is-open');
+      other.querySelector('.info-icon')?.setAttribute('aria-expanded', 'false');
+    });
+    if (open) return;
+    card.classList.add('is-open');
+    button.setAttribute('aria-expanded', 'true');
+  });
+});
+
+document.addEventListener('click', (event) => {
+  if (event.target.closest('.stat-card')) return;
+  document.querySelectorAll('.stat-card.is-open').forEach((card) => {
+    card.classList.remove('is-open');
+    card.querySelector('.info-icon')?.setAttribute('aria-expanded', 'false');
+  });
+});
+
+/* ------------------------------------ benefits: accordion + diagram swap --- */
+
+/* Each diagram is drawn from the shape + node count declared on the item, so
+   selecting a benefit visibly changes the image as well as the copy. */
+const VISUAL_BOX = 'viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet"';
+
+/* A packet travelling along a connector — the moving point that makes each
+   diagram read as live traffic rather than a static schematic. animateMotion
+   defaults to calcMode="paced", which is what gives constant velocity.
+   Emitted only when motion is welcome; SMIL ignores the CSS reduced-motion
+   override, so it has to be suppressed at the source. */
+const packet = (d, dur, begin = 0) => reducedMotion ? '' :
+  `<circle class="bv-packet" r="3.4"><animateMotion path="${d}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></circle>`;
+
+const visualShapes = {
+  ring(n) {
+    const cx = 200, cy = 150, r = 104;
+    let spokes = '', nodes = '', pkts = '';
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
+      const x = +(cx + Math.cos(angle) * r).toFixed(1);
+      const y = +(cy + Math.sin(angle) * r).toFixed(1);
+      spokes += `<line class="bv-spoke" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
+      nodes += `<circle class="bv-node" cx="${x}" cy="${y}" r="9"/>`;
+      pkts += packet(`M${cx} ${cy}L${x} ${y}`, 2.4, (i * 2.4) / n);
+    }
+    return `<circle class="bv-ring" cx="${cx}" cy="${cy}" r="${r}"/><circle class="bv-ring" cx="${cx}" cy="${cy}" r="${r - 34}"/>${spokes}${pkts}${nodes}<circle class="bv-core" cx="${cx}" cy="${cy}" r="30"/><text class="bv-label" x="${cx}" y="${cy + 5}">EDGE</text>`;
+  },
+  converge(n) {
+    const cx = 296, cy = 150;
+    let lines = '', nodes = '', pkts = '';
+    for (let i = 0; i < n; i++) {
+      const y = +(46 + i * (208 / Math.max(1, n - 1))).toFixed(1);
+      const d = `M78 ${y}C168 ${y} 196 ${cy} ${cx - 34} ${cy}`;
+      lines += `<path class="bv-spoke" fill="none" d="${d}"/>`;
+      nodes += `<circle class="bv-node" cx="78" cy="${y}" r="7"/>`;
+      pkts += packet(d, 2.8, (i * 2.8) / n);
+    }
+    return `${lines}${pkts}${nodes}<circle class="bv-ring" cx="${cx}" cy="${cy}" r="54"/><circle class="bv-core" cx="${cx}" cy="${cy}" r="32"/><text class="bv-label" x="${cx}" y="${cy + 5}">ONE</text>`;
+  },
+  path(n) {
+    let d = 'M40 216', nodes = '';
+    for (let i = 0; i < n; i++) {
+      const x = +(40 + i * (320 / Math.max(1, n - 1))).toFixed(1);
+      const y = +(216 - i * (150 / Math.max(1, n - 1)) + (i % 2 ? 26 : 0)).toFixed(1);
+      if (i) d += `L${x} ${y}`;
+      nodes += `<circle class="bv-node" cx="${x}" cy="${y}" r="8"/>`;
+    }
+    return `<path class="bv-spoke" fill="none" d="${d}"/>${packet(d, 3.2)}${packet(d, 3.2, 1.6)}${nodes}<circle class="bv-core" cx="360" cy="66" r="26"/><text class="bv-label" x="360" y="71">APP</text>`;
+  },
+  gate(n) {
+    let left = '', lines = '', pkts = '';
+    for (let i = 0; i < n; i++) {
+      const y = +(62 + i * (176 / Math.max(1, n - 1))).toFixed(1);
+      left += `<circle class="bv-node" cx="64" cy="${y}" r="8"/>`;
+      lines += `<line class="bv-spoke" x1="64" y1="${y}" x2="168" y2="150"/>`;
+      pkts += packet(`M64 ${y}L168 150`, 2, (i * 2) / n);
+    }
+    return `${lines}${pkts}${left}<rect class="bv-bar" x="168" y="86" width="64" height="128" rx="3" transform="translate(0,-36)"/><text class="bv-label" x="200" y="155">GATE</text><line class="bv-spoke" x1="232" y1="150" x2="322" y2="150"/>${packet('M232 150L322 150', 1.6, .5)}<circle class="bv-core" cx="336" cy="150" r="24"/>`;
+  },
+  stack(n) {
+    let bars = '', pkts = '';
+    const h = 22, gap = 8;
+    for (let i = 0; i < n; i++) {
+      const y = +(150 - (n * (h + gap)) / 2 + i * (h + gap)).toFixed(1);
+      const w = 150 + (i % 3) * 52;
+      const x = +(200 - w / 2).toFixed(1);
+      bars += `<rect class="bv-bar" x="${x}" y="${y}" width="${w}" height="${h}" rx="2"/>`;
+      if (i % 2 === 0) pkts += packet(`M${x} ${y + h / 2}L${x + w} ${y + h / 2}`, 2.6, i * 0.4);
+    }
+    return `${bars}${pkts}<circle class="bv-core" cx="200" cy="150" r="26"/><text class="bv-label" x="200" y="155">LOG</text>`;
+  },
+  pulse(n) {
+    let rings = '', nodes = '';
+    for (let i = 1; i <= 3; i++) rings += `<circle class="bv-ring" cx="200" cy="150" r="${34 + i * 32}"/>`;
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI * 2 * i) / n - Math.PI / 3;
+      nodes += `<circle class="bv-node" cx="${(200 + Math.cos(angle) * 112).toFixed(1)}" cy="${(150 + Math.sin(angle) * 112).toFixed(1)}" r="6"/>`;
+    }
+    const orbit = 'M200 52A98 98 0 1 1 200 248A98 98 0 1 1 200 52';
+    return `${rings}${nodes}${packet(orbit, 5.5)}${packet(orbit, 5.5, 2.75)}<circle class="bv-core" cx="200" cy="150" r="30"/><text class="bv-label" x="200" y="155">ALERT</text>`;
+  }
+};
+
+const benefitList = document.querySelector('[data-benefit-list]');
+const visualIndex = document.querySelector('[data-visual-index]');
+const visualTag = document.querySelector('[data-visual-tag]');
+const visualBody = document.querySelector('[data-visual-body]');
+const visualCaption = document.querySelector('[data-visual-caption]');
+
+const paintBenefit = (item) => {
+  if (!item || !visualBody) return;
+  const shape = visualShapes[item.dataset.shape] || visualShapes.ring;
+  const nodes = Math.min(12, Math.max(3, Number(item.dataset.nodes) || 6));
+  visualBody.innerHTML = `<svg ${VISUAL_BOX} role="img" aria-label="Diagram for ${item.querySelector('.benefit-name').textContent}">${shape(nodes)}</svg>`;
+  if (visualIndex) visualIndex.textContent = item.dataset.benefit;
+  if (visualTag) visualTag.textContent = item.dataset.tag;
+  if (visualCaption) visualCaption.textContent = item.dataset.caption;
+};
+
+if (benefitList) {
+  const items = [...benefitList.querySelectorAll('.benefit-item')];
+  items.forEach((item) => {
+    item.querySelector('button')?.addEventListener('click', () => {
+      items.forEach((other) => {
+        const active = other === item;
+        other.classList.toggle('is-open', active);
+        other.querySelector('button')?.setAttribute('aria-expanded', String(active));
+      });
+      paintBenefit(item);
+    });
+  });
+  paintBenefit(items.find((item) => item.classList.contains('is-open')) || items[0]);
+}
+
+/* --------------------------------------------------- generic tab groups --- */
+
+/* One implementation drives the attribute rail, the resource tabs, and the
+   reading-track tabs. Panels stay in the DOM so their content remains
+   crawlable; only `hidden` changes. */
+const wireTabs = (tabSelector, { vertical = false } = {}) => {
+  const tabs = [...document.querySelectorAll(tabSelector)];
+  if (!tabs.length) return;
+
+  const select = (tab, { focus = true } = {}) => {
+    tabs.forEach((other) => {
+      const active = other === tab;
+      other.setAttribute('aria-selected', String(active));
+      other.tabIndex = active ? 0 : -1;
+      const panel = document.getElementById(other.getAttribute('aria-controls'));
+      if (panel) panel.hidden = !active;
+    });
+    if (focus) tab.focus();
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => select(tab, { focus: false }));
+    tab.addEventListener('keydown', (event) => {
+      const prevKeys = vertical ? ['ArrowUp', 'ArrowLeft'] : ['ArrowLeft', 'ArrowUp'];
+      const nextKeys = vertical ? ['ArrowDown', 'ArrowRight'] : ['ArrowRight', 'ArrowDown'];
+      let index = tabs.indexOf(tab);
+
+      if (prevKeys.includes(event.key)) index = (index - 1 + tabs.length) % tabs.length;
+      else if (nextKeys.includes(event.key)) index = (index + 1) % tabs.length;
+      else if (event.key === 'Home') index = 0;
+      else if (event.key === 'End') index = tabs.length - 1;
+      else return;
+
+      event.preventDefault();
+      select(tabs[index]);
+    });
+  });
+};
+
+wireTabs('[data-attribute]', { vertical: true });
+wireTabs('[data-resource]');
+wireTabs('[data-explore]');
+
+/* ------------------------------------------ architecture accordion list --- */
+
+const archList = document.querySelector('[data-arch-list]');
+const archItems = [...document.querySelectorAll('[data-arch]')];
+
+archItems.forEach((item) => {
+  item.addEventListener('toggle', () => {
+    if (!item.open) return;
+    archItems.forEach((other) => { if (other !== item) other.open = false; });
+  });
+});
+
+const archToggle = document.querySelector('[data-arch-toggle]');
+const archToggleLabel = document.querySelector('[data-arch-toggle-label]');
+const hiddenCount = archItems.filter((item) => item.classList.contains('is-extra')).length;
+
+archToggle?.addEventListener('click', () => {
+  const expanded = archList.classList.toggle('is-expanded');
+  archToggle.setAttribute('aria-expanded', String(expanded));
+  if (archToggleLabel) {
+    archToggleLabel.textContent = expanded
+      ? 'Show fewer principles'
+      : `Show all ${archItems.length} principles`;
+  }
+  archToggle.querySelector('span[aria-hidden]').textContent = expanded ? '↑' : '↓';
+
+  /* Collapsing must not leave an open accordion stranded out of view. */
+  if (!expanded) {
+    archItems.forEach((item) => { if (item.classList.contains('is-extra')) item.open = false; });
+  }
+});
+
+if (archToggleLabel && hiddenCount) archToggleLabel.textContent = `Show all ${archItems.length} principles`;
+if (archToggle && !hiddenCount) archToggle.hidden = true;
+
+/* ---------------------------------------------------------- newsletter --- */
+
+document.querySelector('.newsletter-form')?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const status = form.querySelector('[data-form-status]');
+  const email = form.querySelector('#news-email');
+  const role = form.querySelector('#news-role');
+
+  if (!email.value.trim() || !email.checkValidity()) {
+    if (status) status.textContent = 'Enter a valid email address to subscribe.';
+    email.focus();
+    return;
+  }
+  if (!role.value) {
+    if (status) status.textContent = 'Choose the role that best describes your work.';
+    role.focus();
+    return;
+  }
+
+  if (status) status.textContent = 'You are on the list — the next Edge Notes briefing arrives by email.';
+  form.querySelector('button[type="submit"]').innerHTML = 'Subscribed <span aria-hidden="true">✓</span>';
+});
+
+/* -------------------------------------------------------------- reveal --- */
+
+if (reducedMotion) {
+  document.querySelectorAll('.reveal').forEach((element) => element.classList.add('is-visible'));
+} else {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: .06, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+}
