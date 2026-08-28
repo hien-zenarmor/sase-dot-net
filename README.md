@@ -2,7 +2,7 @@
 
 An editorial, interactive guide to **Secure Access Service Edge (SASE)**. The site explains how cloud-delivered networking and security converge at the edge through a responsive, dependency-free experience.
 
-[View the live site](https://ktg1.github.io/sase-net-site/)
+[View the live site](https://hien-zenarmor.github.io/sase-dot-net/)
 
 The homepage is built to the wireframe in `example-homepage-zenarmor.drawio.png`, including its interaction notes.
 
@@ -33,8 +33,8 @@ There is no build step and no runtime dependency.
 Clone the repository and serve its root directory with any static file server:
 
 ```bash
-git clone https://github.com/KTG1/sase-net-site.git
-cd sase-net-site
+git clone https://github.com/hien-zenarmor/sase-dot-net.git
+cd sase-dot-net
 python3 -m http.server 8000
 ```
 
@@ -98,7 +98,7 @@ itself remains SASE.Net. Search `index.html` for `Zenarmor` to rename them.
 
 The `main` branch is published with GitHub Pages. Changes pushed to `main` appear at:
 
-**https://ktg1.github.io/sase-net-site/**
+**https://hien-zenarmor.github.io/sase-dot-net/**
 
 Deployment status is available from the repository's **Actions** and **Deployments** views.
 
