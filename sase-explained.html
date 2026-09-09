@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A plain-language guide to Secure Access Service Edge (SASE): what it combines, why it emerged, the two ways it is delivered, and how to tell the models apart.">
+  <meta name="theme-color" content="#06121b">
+  <title>SASE, Explained</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+  <style>
+    /* ============================================================
+       SASE.net — "SASE Explained" guide page
+       Reuses the SASE.net homepage design language (tokens, fonts,
+       treatments) in a two-column documentation layout.
+       ============================================================ */
+    :root {
+      --navy: #06121b; --navy-2: #0a1e2b; --panel: #0f2a39; --panel-2: #143546;
+      --cyan: #58efe3; --blue: #6e9cff; --amber: #ffad66;
+      --paper: #f4f8f7; --muted: #e3edeb; --ink: #0e2029;
+      --slate: #56707a; --slate-2: #7c949c; --white: #f7fbfa;
+      --teal: #12817d;
+      --line-dark: rgba(14, 32, 41, .14);
+      --line-dark-2: rgba(14, 32, 41, .28);
+      --line-light: rgba(247, 251, 250, .15);
+      --line-light-2: rgba(247, 251, 250, .32);
+      --display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      --body: Inter, -apple-system, "Segoe UI", Arial, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+      --radius: 3px;
+      --header-h: 62px;
+      --nav-w: 292px;
+      --shell: 1520px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 20px); -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; color: var(--ink); background: var(--paper);
+      font-family: var(--body); font-size: 16px; line-height: 1.6;
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    img, svg { max-width: 100%; }
+    a { color: inherit; }
+    button, input, select { font: inherit; color: inherit; }
+    h1, h2, h3, h4, p, blockquote, ul { margin-top: 0; }
+    ul { padding-left: 0; list-style: none; }
+    ::selection { color: var(--navy); background: var(--cyan); }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+    /* ---------------------------------------------------- header --- */
+    .topbar {
+      position: sticky; top: 0; z-index: 100; height: var(--header-h);
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 0 clamp(18px, 3vw, 34px);
+      color: var(--white); background: rgba(6, 18, 27, .92);
+      border-bottom: 1px solid var(--line-light);
+      backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; font: 600 17px/1 var(--display); letter-spacing: .13em; }
+    .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; color: var(--navy); background: var(--cyan); font: 700 15px/1 var(--display); letter-spacing: -.04em; }
+    .topnav { display: flex; align-items: center; gap: clamp(16px, 2vw, 30px); }
+    .topnav a:not(.button) { color: #b3c9ce; text-decoration: none; font: 500 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: color .2s var(--ease); }
+    .topnav a:not(.button):hover { color: var(--cyan); }
+    .button {
+      display: inline-flex; align-items: center; gap: 12px; min-height: 40px; padding: 0 18px;
+      color: var(--navy); background: var(--cyan); border: 1px solid var(--cyan);
+      font: 500 10px var(--mono); letter-spacing: .07em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+      transition: background .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+    }
+    .button:hover { background: var(--white); border-color: var(--white); transform: translateY(-1px); }
+    .button span { transition: transform .2s var(--ease); }
+    .button:hover span { transform: translateX(3px); }
+    .button-teal { color: var(--white); background: var(--teal); border-color: var(--teal); }
+    .button-teal:hover { color: var(--navy); background: var(--cyan); border-color: var(--cyan); }
+    .menu-toggle { display: none; width: 40px; height: 40px; padding: 10px 8px; background: transparent; border: 1px solid var(--line-light-2); cursor: pointer; }
+    .menu-toggle span { display: block; height: 1px; background: currentColor; }
+    .menu-toggle span + span { margin-top: 6px; }
+
+    /* ------------------------------------------------------- hero --- */
+    .hero { color: var(--white); background: var(--navy); border-bottom: 1px solid var(--line-light); position: relative; overflow: hidden; }
+    .hero::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(120% 90% at 88% 8%, rgba(88, 239, 227, .10), transparent 55%);
+    }
+    .hero-inner { position: relative; max-width: var(--shell); margin: 0 auto; padding: clamp(58px, 8vw, 104px) clamp(24px, 5vw, 96px) clamp(50px, 6vw, 84px); }
+    .eyebrow { margin: 0 0 24px; color: var(--cyan); font: 500 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow .dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--cyan); vertical-align: middle; }
+    .hero h1 { max-width: 16ch; margin: 0 0 26px; font: 600 clamp(50px, 8vw, 122px)/.86 var(--display); letter-spacing: -.045em; text-transform: uppercase; }
+    .hero h1 em { font-style: normal; color: var(--cyan); }
+    .hero p { max-width: 60ch; margin: 0 0 14px; color: #b6cacf; font-size: clamp(16px, 1.15vw, 19px); line-height: 1.72; }
+    .hero p:last-of-type { margin-bottom: 0; color: #7c979d; }
+
+    /* ------------------------------------------------- doc shell --- */
+    .doc { display: grid; grid-template-columns: var(--nav-w) minmax(0, 1fr); align-items: start; max-width: var(--shell); margin: 0 auto; }
+
+    /* left navigation */
+    .doc-nav {
+      position: sticky; top: var(--header-h); align-self: start;
+      height: calc(100vh - var(--header-h)); overflow-y: auto; overscroll-behavior: contain;
+      padding: 38px 26px 48px; color: #b7c8cd; background: var(--navy);
+      border-right: 1px solid var(--line-light);
+      scrollbar-width: thin; scrollbar-color: rgba(88, 239, 227, .4) transparent;
+    }
+    .nav-block + .nav-block { margin-top: 40px; }
+    .nav-label { margin: 0 0 16px; color: var(--cyan); font: 500 9px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .doc-nav a { display: block; padding: 9px 0 9px 16px; margin-left: -16px; color: #9fb7bd; text-decoration: none; font-size: 14px; line-height: 1.4; border-left: 2px solid transparent; transition: color .2s var(--ease), border-color .2s var(--ease); }
+    .doc-nav .toc a .n { color: var(--teal); font: 500 10px var(--mono); margin-right: 10px; }
+    .doc-nav .toc a:hover { color: var(--white); }
+    .doc-nav .toc a.active { color: var(--white); border-left-color: var(--cyan); }
+    .doc-nav .toc a.active .n { color: var(--cyan); }
+    .sources a { position: relative; padding-right: 16px; }
+    .sources a:hover { color: var(--cyan); border-left-color: var(--line-light-2); }
+    .sources a b { display: block; font-weight: 600; font-size: 13.5px; color: inherit; }
+    .sources a small { display: block; margin-top: 2px; color: var(--slate-2); font: 400 11px var(--mono); }
+    .sources a::after { content: "↗"; position: absolute; right: 0; top: 9px; font-size: 11px; opacity: .5; }
+    .nav-note { margin: 14px 0 0; color: var(--slate-2); font-size: 11.5px; line-height: 1.55; }
+    .doc-nav .arts a { padding: 7px 0 7px 16px; font-size: 13.5px; }
+    .doc-nav .arts a:hover { color: var(--white); border-left-color: var(--line-light-2); }
+
+    /* backdrop for the mobile nav drawer — fixed so it never joins the grid */
+    .nav-scrim { position: fixed; inset: var(--header-h) 0 0; z-index: 94; background: rgba(6, 18, 27, .5); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .3s var(--ease), visibility .3s; }
+    .nav-scrim.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+    /* main column */
+    .doc-main { min-width: 0; background: var(--paper); }
+    .sec { padding: clamp(52px, 6vw, 92px) clamp(24px, 5vw, 84px); border-bottom: 1px solid var(--line-dark); }
+    .sec:nth-child(even) { background: var(--muted); }
+    .kicker { margin: 0 0 20px; color: var(--teal); font: 500 9px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .sec h2 { max-width: 20ch; margin: 0 0 22px; font: 600 clamp(34px, 4.2vw, 66px)/.9 var(--display); letter-spacing: -.035em; text-transform: uppercase; }
+    .sec h2 em { font-style: normal; color: var(--teal); }
+    .prose { max-width: 72ch; }
+    .prose p { margin: 0 0 18px; color: #33454f; font-size: 16.5px; line-height: 1.76; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--ink); font-weight: 650; }
+    .lede { max-width: 66ch; margin: 0 0 30px; color: var(--slate); font-size: clamp(17px, 1.4vw, 20px); line-height: 1.62; letter-spacing: -.01em; }
+
+    /* callout */
+    .callout { max-width: 78ch; margin: 34px 0 0; padding: 22px 26px; background: var(--white); border-left: 3px solid var(--cyan); box-shadow: 0 14px 40px rgba(14, 32, 41, .06); }
+    .callout .tag { display: block; margin-bottom: 8px; color: var(--teal); font: 500 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .callout p { margin: 0; font-size: 16px; line-height: 1.68; }
+    .callout strong { font-weight: 650; }
+
+    /* component cards */
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 34px; }
+    .card { padding: 24px 22px; background: var(--white); border-top: 2px solid var(--ink); }
+    .card .abbr { color: var(--teal); font: 500 9px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .card h3 { margin: 12px 0 10px; font: 600 clamp(20px, 1.8vw, 26px)/1 var(--display); text-transform: uppercase; }
+    .card p { margin: 0; color: var(--slate); font-size: 14px; line-height: 1.66; }
+
+    /* two-model comparison */
+    .models { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
+    .model { padding: 28px 26px; }
+    .model.cloud { color: var(--white); background: var(--ink); }
+    .model.sovereign { color: var(--navy); background: var(--cyan); }
+    .model .tag { font: 500 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+    .model h3 { margin: 8px 0 18px; font: 600 clamp(24px, 2.4vw, 34px)/.98 var(--display); text-transform: uppercase; }
+    .model ul { display: grid; gap: 12px; margin: 0; }
+    .model li { position: relative; padding-left: 20px; font-size: 14.5px; line-height: 1.6; }
+    .model.cloud li { color: #cdd9dd; }
+    .model li::before { content: ""; position: absolute; left: 0; top: .6em; width: 10px; height: 1px; background: currentColor; opacity: .8; }
+    .model .who { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid currentColor; font-size: 13px; line-height: 1.6; opacity: .85; }
+    .model.cloud .who { border-top-color: var(--line-light); }
+    .model .who b { font-weight: 650; }
+
+    /* quote */
+    blockquote.pull { max-width: 80ch; margin: 40px 0 0; padding: 4px 0 4px 24px; border-left: 3px solid var(--teal); }
+    blockquote.pull p { margin: 0 0 12px; font: 600 clamp(18px, 1.7vw, 23px)/1.44 var(--body); letter-spacing: -.015em; color: var(--ink); }
+    blockquote.pull footer { color: var(--slate); font: 500 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+
+    /* FAQ accordions */
+    .faq { margin-top: 30px; border-top: 1px solid var(--line-dark); }
+    details.q { border-bottom: 1px solid var(--line-dark); }
+    details.q summary { display: flex; align-items: center; gap: 18px; padding: 22px 2px; cursor: pointer; list-style: none; transition: padding-left .3s var(--ease), color .2s var(--ease); }
+    details.q summary::-webkit-details-marker { display: none; }
+    details.q summary:hover { padding-left: 10px; color: var(--teal); }
+    details.q summary .qt { flex: 1; font: 600 clamp(19px, 1.9vw, 27px)/1.1 var(--display); text-transform: uppercase; letter-spacing: -.01em; }
+    details.q summary .mark { flex: none; position: relative; width: 14px; height: 14px; }
+    details.q summary .mark::before, details.q summary .mark::after { content: ""; position: absolute; top: 50%; left: 0; width: 14px; height: 1.5px; background: currentColor; transition: transform .3s var(--ease), opacity .3s var(--ease); }
+    details.q summary .mark::after { transform: rotate(90deg); }
+    details.q[open] summary .mark::after { transform: rotate(0); opacity: 0; }
+    details.q[open] summary { color: var(--teal); }
+    details.q .qa { max-width: 76ch; padding: 0 0 26px; }
+    details.q .qa p { margin: 0; color: var(--slate); font-size: 15.5px; line-height: 1.76; }
+
+    /* glossary */
+    .terms { margin-top: 30px; border-top: 1px solid var(--line-dark); }
+    .terms div { display: grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--line-dark); }
+    .terms dt, .terms div b { font: 600 15px var(--display); letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
+    .terms div span { color: var(--slate); font-size: 14.5px; line-height: 1.62; }
+
+    /* footer */
+    .site-footer { color: var(--white); background: var(--navy); border-top: 1px solid var(--line-light); }
+    .footer-inner { max-width: var(--shell); margin: 0 auto; padding: clamp(44px, 5vw, 70px) clamp(24px, 5vw, 84px) 34px; }
+    .footer-inner .note { max-width: 60ch; margin: 0 0 30px; color: #93aeb4; font-size: 14px; line-height: 1.7; }
+    .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 24px; border-top: 1px solid var(--line-light); color: var(--slate-2); font: 400 10px var(--mono); letter-spacing: .06em; }
+    .footer-base a { color: #b3c9ce; text-decoration: none; }
+    .footer-base a:hover { color: var(--cyan); }
+
+    /* latest briefs strip */
+    .briefs { padding: clamp(38px, 4.5vw, 60px) clamp(24px, 5vw, 84px); background: var(--paper); border-bottom: 1px solid var(--line-dark); }
+    .briefs-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .briefs-head .kicker { margin: 0; }
+    .briefs-all { color: var(--teal); text-decoration: none; font: 500 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .briefs-all:hover { color: var(--ink); }
+    .briefs-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .brief { display: flex; flex-direction: column; gap: 10px; padding: 20px 18px; background: var(--white); border: 1px solid var(--line-dark); text-decoration: none; transition: border-color .2s var(--ease), transform .2s var(--ease); }
+    .brief:hover { border-color: var(--teal); transform: translateY(-3px); }
+    .brief .bt { color: var(--teal); font: 500 8px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .brief b { font: 600 clamp(18px, 1.5vw, 22px)/1.02 var(--display); text-transform: uppercase; letter-spacing: -.01em; }
+    .brief .bd { color: var(--slate); font-size: 13px; line-height: 1.5; }
+
+    /* ------------------------------------------------ responsive --- */
+    @media (max-width: 1240px) { .cards, .briefs-row { grid-template-columns: repeat(2, 1fr); } }
+
+    @media (max-width: 1000px) {
+      :root { --nav-w: 0px; }
+      .menu-toggle { display: block; }
+      .doc { grid-template-columns: 1fr; }
+      .doc-nav {
+        position: fixed; top: var(--header-h); left: 0; bottom: 0; width: min(320px, 84vw); height: auto; z-index: 95;
+        transform: translateX(-104%); visibility: hidden; transition: transform .32s var(--ease), visibility .32s;
+      }
+      .doc-nav.open { transform: none; visibility: visible; box-shadow: 40px 0 80px rgba(0, 0, 0, .4); }
+    }
+
+    @media (max-width: 720px) {
+      .topnav .topnav-links { display: none; }
+      .models { grid-template-columns: 1fr; }
+      .cards, .briefs-row { grid-template-columns: 1fr; }
+      .briefs-head { flex-direction: column; gap: 8px; }
+      .terms div { grid-template-columns: 1fr; gap: 3px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================ HEADER -->
+  <header class="topbar">
+    <a class="brand" href="#top"><span class="brand-mark">S/</span>SASE.NET</a>
+    <nav class="topnav" aria-label="Primary">
+      <span class="topnav-links">
+        <a href="#what">The idea</a>
+        <a href="#parts">Components</a>
+        <a href="#models">Two models</a>
+        <a href="#choose">Choosing</a>
+      </span>
+      <a class="button button-teal" href="#glossary">Glossary <span aria-hidden="true">↓</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="doc-nav" aria-label="Open guide menu">
+        <span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ============================================================ HERO -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span> A field guide</p>
+      <h1>SASE, without the <em>acronym soup.</em></h1>
+      <p>Secure Access Service Edge is a way of running networking and security as one service instead of as a rack of separate boxes. This guide explains what it actually combines, why it showed up when it did, and the one design choice that separates most vendors from each other.</p>
+      <p>No product pitch. Where a name helps make a point, we use it.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ DOC SHELL -->
+  <div class="doc">
+
+    <!-- ---------- LEFT NAV ---------- -->
+    <div class="nav-scrim" data-scrim aria-hidden="true"></div>
+    <aside class="doc-nav" id="doc-nav" aria-label="Guide contents">
+      <div class="nav-block toc">
+        <p class="nav-label">The guide</p>
+        <a href="#what"><span class="n">01</span>What SASE fixes</a>
+        <a href="#parts"><span class="n">02</span>What is inside</a>
+        <a href="#models"><span class="n">03</span>Two delivery models</a>
+        <a href="#choose"><span class="n">04</span>How to choose</a>
+        <a href="#glossary"><span class="n">05</span>The acronyms</a>
+      </div>
+
+      <!-- Article cluster (spokes). Links are placeholders (href="#") until the
+           individual brief pages exist. 15 live now; 15 more to come. -->
+      <div class="nav-block arts">
+        <p class="nav-label">Comparisons</p>
+        <a href="#">SASE vs Zero Trust</a>
+        <a href="#">SASE vs SaaS</a>
+        <a href="#">SASE vs SSL VPN</a>
+      </div>
+      <div class="nav-block arts">
+        <p class="nav-label">Components</p>
+        <a href="#">SASE Components</a>
+        <a href="#">SD-WAN</a>
+        <a href="#">CASB</a>
+        <a href="#">Secure Web Gateway</a>
+        <a href="#">Data Loss Prevention</a>
+      </div>
+      <div class="nav-block arts">
+        <p class="nav-label">Concepts</p>
+        <a href="#">Zero Trust &amp; SASE</a>
+        <a href="#">SASE &amp; SSE</a>
+      </div>
+      <div class="nav-block arts">
+        <p class="nav-label">Adoption</p>
+        <a href="#">SASE Deployment</a>
+        <a href="#">Use Cases</a>
+        <a href="#">Managed SASE</a>
+        <a href="#">SASE for MSPs</a>
+        <a href="#">SASE for Business</a>
+      </div>
+
+      <!-- Vendor-agnostic "further reading" sources are intentionally NOT linked yet.
+           Candidate list is tracked in docs/sase-reference-sources.md. -->
+    </aside>
+
+    <!-- ---------- MAIN CONTENT ---------- -->
+    <main class="doc-main" id="main">
+
+      <!-- LATEST BRIEFS (static strip — not a carousel) -->
+      <section class="briefs" aria-label="Latest briefs">
+        <div class="briefs-head">
+          <p class="kicker">Latest briefs</p>
+          <a class="briefs-all" href="#">All 15 articles →</a>
+        </div>
+        <div class="briefs-row">
+          <a class="brief" href="#"><span class="bt">Comparison</span><b>SASE vs Zero Trust</b><span class="bd">Differences in architecture and scope</span></a>
+          <a class="brief" href="#"><span class="bt">Component</span><b>SASE Components</b><span class="bd">The core building blocks of a SASE architecture</span></a>
+          <a class="brief" href="#"><span class="bt">Adoption</span><b>Managed SASE</b><span class="bd">Outsourcing SASE delivery and operations</span></a>
+          <a class="brief" href="#"><span class="bt">Adoption</span><b>SASE for MSPs</b><span class="bd">How service providers deliver SASE</span></a>
+        </div>
+      </section>
+
+      <!-- THE IDEA -->
+      <section class="sec" id="what">
+        <p class="kicker">The idea</p>
+        <h2>What SASE is <em>trying to fix.</em></h2>
+        <p class="lede">Analyst firm Gartner coined the term SASE in 2019. The word describes a pattern more than a product, so two vendors can both say "SASE" and mean quite different things under the hood.</p>
+        <div class="prose">
+          <p>For decades the model was simple: staff sat in an office, applications lived in a data center down the hall, and a firewall guarded the one door between the office and the internet. Security was mostly a matter of controlling that door.</p>
+          <p>Then the applications moved to the cloud and the staff moved home. The traffic that used to stay inside the building now goes straight out to Microsoft 365, Salesforce, and a hundred other services. Forcing all of that back through a single office firewall (a practice called <em>backhaul</em>) adds delay and protects less than it used to, because most of what needs protecting no longer passes through that door at all.</p>
+          <p>SASE is the response. It takes the security functions that used to live in separate appliances and delivers them as a service that sits close to wherever the user and the workload actually are. Two things get folded together: the <strong>networking</strong> job of moving traffic efficiently, and the <strong>security</strong> job of inspecting and controlling it. One policy, applied at the edge, for anyone connecting from anywhere.</p>
+        </div>
+        <div class="callout">
+          <span class="tag">The short version</span>
+          <p><strong>SASE = networking + security</strong>, converged into one policy and enforced at the edge instead of at a central chokepoint.</p>
+        </div>
+      </section>
+
+      <!-- COMPONENTS -->
+      <section class="sec" id="parts">
+        <p class="kicker">The components</p>
+        <h2>What is actually <em>inside.</em></h2>
+        <p class="lede">SASE is a bundle. The security half is often called SSE (Security Service Edge); add the networking half and you have SASE. These are the pieces most vendors agree belong in the box.</p>
+        <div class="cards">
+          <article class="card"><span class="abbr">ZTNA</span><h3>Zero Trust Network Access</h3><p>Connects a verified user to one specific application, not the whole network. Access is re-checked continuously, so a session that turns risky can be cut off while it is still running.</p></article>
+          <article class="card"><span class="abbr">SWG</span><h3>Secure Web Gateway</h3><p>Inspects web traffic to block malicious sites, malware, and policy violations. A filter that follows the user wherever they connect from.</p></article>
+          <article class="card"><span class="abbr">CASB</span><h3>Cloud Access Security Broker</h3><p>Sees which cloud apps are in use, including the ones IT never approved, and applies rules to sensitive actions inside them, like blocking an upload to a personal drive.</p></article>
+          <article class="card"><span class="abbr">FWaaS</span><h3>Firewall as a Service</h3><p>Delivers stateful firewalling and intrusion prevention from the service edge, so a branch gets the same protection without a physical firewall in every closet.</p></article>
+          <article class="card"><span class="abbr">SD-WAN</span><h3>Software-Defined WAN</h3><p>The networking half. Picks the best path for each application across whatever links are available, and can replace expensive private MPLS circuits.</p></article>
+          <article class="card"><span class="abbr">DLP</span><h3>Data Loss Prevention</h3><p>Classifies sensitive content and controls where it can go, so a customer list or a patient record does not quietly leave through email or a SaaS app.</p></article>
+        </div>
+        <div class="callout">
+          <span class="tag">Why bundle them</span>
+          <p>Chaining six separate products means traffic gets decrypted, inspected, and re-encrypted at each hop, and context is lost between vendors. A converged platform decodes the session once and lets every check read from that. Adding a control becomes a setting, not another box on the rack.</p>
+        </div>
+      </section>
+
+      <!-- TWO MODELS -->
+      <section class="sec" id="models">
+        <p class="kicker">The dividing line</p>
+        <h2>Two ways to deliver <em>the same idea.</em></h2>
+        <p class="lede">Everyone agrees on the components above. The real difference between vendors is <em>where the inspection happens</em>. Ask this early: it shapes latency, cost, data residency, and who is in control when something breaks.</p>
+        <div class="models">
+          <div class="model cloud">
+            <span class="tag">Model 1</span>
+            <h3>Cloud-delivered (PoP-based)</h3>
+            <ul>
+              <li>Traffic is routed to the vendor's nearest <strong>point of presence</strong> (PoP), inspected there, then sent on to its destination.</li>
+              <li>The vendor runs a global network of PoPs and, often, a private backbone connecting them.</li>
+              <li>Strong fit when you want the vendor to own the infrastructure and your users sit near their PoPs.</li>
+              <li>Trade-offs: your traffic and data transit vendor-operated cloud; a distant or congested PoP adds latency; a PoP outage reroutes you farther away.</li>
+            </ul>
+            <p class="who"><b>Examples:</b> Zscaler, Palo Alto Networks (Prisma Access), Netskope, Cloudflare, Cato Networks.</p>
+          </div>
+          <div class="model sovereign">
+            <span class="tag">Model 2</span>
+            <h3>Distributed / sovereign</h3>
+            <ul>
+              <li>The enforcement engine runs <strong>on your own infrastructure</strong>: firewalls, gateways, endpoints, and cloud VMs you already operate.</li>
+              <li>Traffic is inspected inline where it originates, then goes straight to its destination. No detour to a vendor PoP.</li>
+              <li>Management can still be cloud-based, but the data and the inspection stay on hardware you control.</li>
+              <li>Strong fit for data-residency requirements, MSPs building their own service, and anyone avoiding backhaul to a third party.</li>
+            </ul>
+            <p class="who"><b>Example:</b> Zenarmor, which deploys as software on existing infrastructure (including OPNsense firewalls) and uses point-to-point encrypted tunnels instead of central gateways.</p>
+          </div>
+        </div>
+        <div class="prose" style="margin-top:34px">
+          <p>Neither model is universally "better." Many organizations happily accept a vendor cloud for the convenience of not running anything themselves. Others cannot, for legal or performance reasons, let their traffic transit a third party's network. The mistake is not knowing which model you are buying until the contract is signed.</p>
+        </div>
+        <blockquote class="pull">
+          <p>"Traditional SASE architectures introduce integration challenges and operational blind spots due to their dependence on cloud-based PoPs. By eliminating PoPs and enabling direct, point-to-point secure connections with inline inspection, [a distributed] architecture reduces latency, accelerates deployment, and lowers operational complexity."</p>
+          <footer>Shamus McGillicuddy · VP of Research, Enterprise Management Associates (EMA)</footer>
+        </blockquote>
+        <div class="callout">
+          <span class="tag">Data sovereignty</span>
+          <p>In the cloud-delivered model, inspecting traffic means it flows through the vendor's infrastructure, wherever that sits. If your organization is bound by rules on where data may travel (public sector, healthcare, finance, or an EU body under NIS2), a distributed model that keeps enforcement on your own gear can be the difference between a viable option and a non-starter.</p>
+        </div>
+      </section>
+
+      <!-- CHOOSING -->
+      <section class="sec" id="choose">
+        <p class="kicker">Before you sign</p>
+        <h2>Questions that separate <em>vendors fast.</em></h2>
+        <p class="lede">Feature sheets look identical. Differences show up under load, across distance, and during failure. A few questions cut through the marketing quickly.</p>
+        <div class="faq">
+          <details class="q" open><summary><span class="qt">Where does inspection physically happen?</span><span class="mark" aria-hidden="true"></span></summary><div class="qa"><p>The core question above. Does my traffic go to your cloud PoP, or is it inspected on infrastructure I control? The answer determines latency, data residency, and what happens to me when your cloud has a bad day.</p></div></details>
+          <details class="q"><summary><span class="qt">Which parts did you build vs. acquire or resell?</span><span class="mark" aria-hidden="true"></span></summary><div class="qa"><p>A platform stitched together from acquisitions often shows its seams: multiple consoles, inconsistent logs, and support teams that hand you off. One engine that decodes traffic a single time behaves more predictably than several products chained in a row.</p></div></details>
+          <details class="q"><summary><span class="qt">What does it cost to retire the old stack?</span><span class="mark" aria-hidden="true"></span></summary><div class="qa"><p>The subscription price is the easy number. Add migration labor, contract termination on the gear you are replacing, and the 60-to-90-day parallel run where you pay for both while policy is moved safely. That parallel-run cost is the line most plans forget.</p></div></details>
+          <details class="q"><summary><span class="qt">What happens during an outage or network partition?</span><span class="mark" aria-hidden="true"></span></summary><div class="qa"><p>If a control plane or a PoP becomes unreachable, does enforcement keep working? Distributed models where each edge holds a compiled copy of policy can keep enforcing while disconnected; a design that phones home for every decision cannot.</p></div></details>
+          <details class="q"><summary><span class="qt">How is encrypted traffic handled?</span><span class="mark" aria-hidden="true"></span></summary><div class="qa"><p>Almost all threats now arrive over TLS, so inspection has to reach inside encryption to be useful. But blanket decryption is a legal and ethical problem. Ask to see how inspection scope and exclusions (banking, health, and similar) are expressed as reviewable policy.</p></div></details>
+          <details class="q"><summary><span class="qt">Can it be delivered as a managed service?</span><span class="mark" aria-hidden="true"></span></summary><div class="qa"><p>Many organizations would rather consume SASE from a service provider than run it in-house. If that is you, ask whether the platform is built for multi-tenant partner delivery, or whether you are being sold a tool the provider bolted a wrapper around.</p></div></details>
+        </div>
+        <blockquote class="pull">
+          <p>"I have used many SSE and SASE solutions and none have been as simple to administrate as Zenarmor. There is nothing out there that comes close."</p>
+          <footer>Shawn Spurko · VP of Information &amp; Cyber Security, Innovation Federal Credit Union</footer>
+        </blockquote>
+      </section>
+
+      <!-- GLOSSARY -->
+      <section class="sec" id="glossary">
+        <p class="kicker">Reference</p>
+        <h2>The acronyms, <em>decoded.</em></h2>
+        <p class="lede">Keep this handy on your next vendor call.</p>
+        <div class="terms">
+          <div><b>SASE</b><span>Secure Access Service Edge. Networking and security converged into one edge-delivered service. Say "sassy."</span></div>
+          <div><b>SSE</b><span>Security Service Edge. The security half of SASE (SWG, CASB, ZTNA, DLP) without the networking (SD-WAN).</span></div>
+          <div><b>ZTNA</b><span>Zero Trust Network Access. Verified access to one app at a time, re-checked continuously. Replaces the always-on VPN.</span></div>
+          <div><b>SWG</b><span>Secure Web Gateway. Filters and inspects outbound web traffic for threats and policy.</span></div>
+          <div><b>CASB</b><span>Cloud Access Security Broker. Visibility and control over the cloud and SaaS apps in use.</span></div>
+          <div><b>FWaaS</b><span>Firewall as a Service. Cloud- or edge-delivered firewalling and intrusion prevention.</span></div>
+          <div><b>SD-WAN</b><span>Software-Defined WAN. Intelligent path selection across links; the networking layer of SASE.</span></div>
+          <div><b>DLP</b><span>Data Loss Prevention. Stops sensitive data from leaving where it should not go.</span></div>
+          <div><b>PoP</b><span>Point of Presence. A vendor-operated location where cloud-delivered SASE inspects your traffic.</span></div>
+          <div><b>Backhaul</b><span>Routing traffic back to a central point before sending it on. The delay SASE aims to remove.</span></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============================================================ FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="note">A plain-language guide to Secure Access Service Edge. Vendor names are used as examples to illustrate the two delivery models, not as endorsements. Published by Zenarmor.</p>
+      <div class="footer-base">
+        <span>© <span data-year>2026</span> SASE.net</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // year
+    document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+    // mobile sidebar drawer
+    var toggle = document.querySelector('.menu-toggle');
+    var nav = document.getElementById('doc-nav');
+    var scrim = document.querySelector('[data-scrim]');
+    function setNav(open) {
+      nav.classList.toggle('open', open);
+      scrim.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    }
+    toggle.addEventListener('click', function () { setNav(!nav.classList.contains('open')); });
+    scrim.addEventListener('click', function () { setNav(false); });
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) setNav(false); });
+
+    // scrollspy — highlight the active section in the left nav
+    var links = Array.prototype.slice.call(document.querySelectorAll('.doc-nav .toc a'));
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('active'); });
+          if (byId[en.target.id]) byId[en.target.id].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    document.querySelectorAll('.sec').forEach(function (s) { spy.observe(s); });
+  </script>
+</body>
+</html>
