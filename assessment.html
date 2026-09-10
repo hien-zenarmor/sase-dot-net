@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive, vendor-neutral SASE architecture assessment. Answer a few questions about your environment and get a personalized framework weighing cloud-PoP, customer-controlled, endpoint-native, and distributed enforcement. Runs entirely in your browser.">
+  <meta name="theme-color" content="#06121b">
+  <title>SASE Architecture Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+  <style>
+    /* ============================================================
+       SASE.net · SASE Architecture Assessment
+       Reuses the "SASE Explained" design language (tokens, fonts,
+       header, treatments) in a stepped questionnaire + results tool.
+       Fully client-side: no data leaves the browser.
+       ============================================================ */
+    :root {
+      --navy: #06121b; --navy-2: #0a1e2b; --panel: #0f2a39; --panel-2: #143546;
+      --cyan: #58efe3; --blue: #6e9cff; --amber: #ffad66;
+      --paper: #f4f8f7; --muted: #e3edeb; --ink: #0e2029;
+      --slate: #56707a; --slate-2: #7c949c; --white: #f7fbfa;
+      --teal: #12817d;
+      --line-dark: rgba(14, 32, 41, .14);
+      --line-dark-2: rgba(14, 32, 41, .28);
+      --line-light: rgba(247, 251, 250, .15);
+      --line-light-2: rgba(247, 251, 250, .32);
+      --display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      --body: Inter, -apple-system, "Segoe UI", Arial, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+      --radius: 3px;
+      --header-h: 62px;
+      --shell: 1520px;
+      /* per-approach accent colors (kept within the site palette) */
+      --c-dist: var(--teal);
+      --c-pop: #3f6f86;
+      --c-cust: #7a6bb0;
+      --c-endp: #c07b3a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; color: var(--ink); background: var(--paper);
+      font-family: var(--body); font-size: 16px; line-height: 1.6;
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    img, svg { max-width: 100%; }
+    a { color: inherit; }
+    button, input, select { font: inherit; color: inherit; }
+    h1, h2, h3, h4, p, blockquote, ul { margin-top: 0; }
+    ul { padding-left: 0; list-style: none; }
+    ::selection { color: var(--navy); background: var(--cyan); }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+    [hidden] { display: none !important; }
+
+    /* ---------------------------------------------------- header --- */
+    .topbar {
+      position: sticky; top: 0; z-index: 100; height: var(--header-h);
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 0 clamp(18px, 3vw, 34px);
+      color: var(--white); background: rgba(6, 18, 27, .92);
+      border-bottom: 1px solid var(--line-light);
+      backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; font: 600 17px/1 var(--display); letter-spacing: .13em; }
+    .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; color: var(--navy); background: var(--cyan); font: 700 15px/1 var(--display); letter-spacing: -.04em; }
+    .topnav { display: flex; align-items: center; gap: clamp(16px, 2vw, 30px); }
+    .topnav a:not(.button) { color: #b3c9ce; text-decoration: none; font: 500 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: color .2s var(--ease); }
+    .topnav a:not(.button):hover { color: var(--cyan); }
+    .button {
+      display: inline-flex; align-items: center; gap: 12px; min-height: 40px; padding: 0 18px;
+      color: var(--navy); background: var(--cyan); border: 1px solid var(--cyan);
+      font: 500 11.5px var(--mono); letter-spacing: .07em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+      transition: background .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease), color .2s var(--ease);
+    }
+    .button:hover { background: var(--white); border-color: var(--white); transform: translateY(-1px); }
+    .button span { transition: transform .2s var(--ease); }
+    .button:hover span { transform: translateX(3px); }
+    .button-teal { color: var(--white); background: var(--teal); border-color: var(--teal); }
+    .button-teal:hover { color: var(--navy); background: var(--cyan); border-color: var(--cyan); }
+    .button[disabled] { opacity: .4; cursor: not-allowed; transform: none; }
+    .button-ghost { background: transparent; color: var(--white); border-color: var(--line-light-2); }
+    .button-ghost:hover { background: transparent; color: var(--cyan); border-color: var(--cyan); transform: translateY(-1px); }
+
+    /* ------------------------------------------------------- hero --- */
+    .hero { color: var(--white); background: var(--navy); border-bottom: 1px solid var(--line-light); position: relative; overflow: hidden; }
+    .hero::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(120% 90% at 88% 8%, rgba(88, 239, 227, .10), transparent 55%);
+    }
+    .hero-inner { position: relative; max-width: var(--shell); margin: 0 auto; padding: clamp(46px, 6vw, 78px) clamp(24px, 5vw, 96px) clamp(40px, 5vw, 66px); }
+    .eyebrow { margin: 0 0 22px; color: var(--cyan); font: 500 11.5px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow .dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--cyan); vertical-align: middle; }
+    .hero h1 { max-width: 18ch; margin: 0 0 22px; font: 600 clamp(42px, 6.6vw, 96px)/.88 var(--display); letter-spacing: -.045em; text-transform: uppercase; }
+    .hero h1 em { font-style: normal; color: var(--cyan); }
+    .hero p { max-width: 62ch; margin: 0 0 14px; color: #b6cacf; font-size: clamp(15.5px, 1.1vw, 18px); line-height: 1.7; }
+    .hero p:last-of-type { margin-bottom: 0; color: #7c979d; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 26px; margin-top: 34px; }
+    .hero-actions .tlink { color: var(--cyan); }
+    .hero-actions .tlink:hover { color: var(--white); }
+
+    /* ------------------------------------------------- app shell --- */
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+
+    /* progress rail (sticky under header, only during the quiz) */
+    .progress { position: sticky; top: var(--header-h); z-index: 40; background: var(--paper); border-bottom: 1px solid var(--line-dark); }
+    .progress-inner { max-width: 980px; margin: 0 auto; padding: 16px clamp(20px, 5vw, 48px) 15px; }
+    .progress-top { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+    .progress-stage { font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+    .progress-count { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+    .progress-count b { color: var(--ink); font-weight: 600; }
+    /* one segment per stage, 1:1 with the pages */
+    .stages { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; }
+    .stage-pip .bar { height: 6px; background: var(--muted); overflow: hidden; }
+    .stage-pip .bar i { display: block; height: 100%; width: 0; background: var(--teal); transition: width .45s var(--ease); }
+    .stage-pip.done .bar i { width: 100%; }
+    .stage-pip.current .bar i { width: 100%; background: var(--cyan); }
+    .stage-pip .lb { display: flex; align-items: center; gap: 6px; margin-top: 9px; font: 500 10.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--slate-2); }
+    .stage-pip.current .lb { color: var(--ink); }
+    .stage-pip.done .lb { color: var(--teal); }
+    .stage-pip .tick { width: 13px; height: 13px; display: grid; place-items: center; border: 1px solid currentColor; font-size: 9px; flex: none; }
+    .stage-pip.done .tick::before { content: "✓"; }
+    .stage-pip.current .tick { background: var(--cyan); border-color: var(--cyan); }
+    .stage-pip .lb .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    @media (max-width: 620px) { .stage-pip .lb .txt { display: none; } .stage-pip .lb { justify-content: center; } }
+
+    /* generic screen padding */
+    .screen { padding: clamp(40px, 6vw, 72px) 0 clamp(52px, 7vw, 88px); }
+
+    /* intro */
+    .intro .kicker, .result-head .kicker { margin: 0 0 18px; color: var(--teal); font: 500 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .intro h2 { margin: 0 0 20px; max-width: 22ch; font: 600 clamp(30px, 4.6vw, 56px)/.92 var(--display); letter-spacing: -.03em; text-transform: uppercase; }
+    .intro h2 em { color: var(--teal); font-style: normal; }
+    .intro .lede { max-width: 64ch; margin: 0 0 30px; color: var(--slate); font-size: clamp(16px, 1.3vw, 19px); line-height: 1.62; letter-spacing: -.01em; }
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 0 0 36px; }
+    .fact { padding: 20px 20px; background: var(--white); border-top: 2px solid var(--ink); }
+    .fact .n { font: 600 34px/1 var(--display); color: var(--teal); }
+    .fact .t { margin-top: 8px; color: var(--slate); font-size: 13.5px; line-height: 1.55; }
+    .fact b { color: var(--ink); }
+    .intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+    .privacy { display: inline-flex; align-items: center; gap: 9px; margin-top: 26px; padding: 12px 16px; background: var(--muted); border-left: 3px solid var(--teal); color: var(--slate); font-size: 13px; line-height: 1.5; max-width: 70ch; }
+    .privacy svg { flex: none; }
+    .tlink { color: var(--teal); text-decoration: none; font: 500 11.5px var(--mono); letter-spacing: .07em; text-transform: uppercase; }
+    .tlink:hover { color: var(--ink); }
+
+    /* stage intro (page header for a section of questions) */
+    .stage-intro { margin-bottom: 8px; }
+    .stage-eyebrow { margin: 0 0 14px; color: var(--teal); font: 500 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .stage-title { margin: 0 0 12px; font: 600 clamp(30px, 4.2vw, 52px)/.94 var(--display); letter-spacing: -.03em; text-transform: uppercase; color: var(--ink); }
+    .stage-desc { max-width: 62ch; margin: 0; color: var(--slate); font-size: clamp(15px, 1.2vw, 17.5px); line-height: 1.6; }
+
+    /* per-question block within a stage */
+    .qblock { margin-top: clamp(34px, 4.5vw, 52px); }
+    .qblock:first-child { margin-top: clamp(30px, 4vw, 44px); }
+    .q-head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+    .q-num { font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+    .q-kind { font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--slate-2); padding-left: 14px; border-left: 1px solid var(--line-dark-2); }
+    .q-title { margin: 0 0 7px; font: 600 clamp(21px, 2.4vw, 30px)/1.06 var(--display); letter-spacing: -.015em; text-transform: uppercase; color: var(--ink); }
+    .q-help { max-width: 66ch; margin: 0 0 20px; color: var(--slate); font-size: 15px; line-height: 1.6; }
+
+    .opts { display: grid; gap: 12px; margin: 0; }
+    .opts.two { grid-template-columns: 1fr 1fr; }
+    .opt { position: relative; display: block; cursor: pointer; }
+    .opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .opt .box {
+      display: flex; align-items: flex-start; gap: 15px; height: 100%;
+      padding: 18px 20px; background: var(--white); border: 1px solid var(--line-dark);
+      transition: border-color .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease);
+    }
+    .opt:hover .box { border-color: var(--line-dark-2); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(14, 32, 41, .06); }
+    .opt input:focus-visible + .box { outline: 2px solid var(--amber); outline-offset: 3px; }
+    .opt .mk { flex: none; width: 20px; height: 20px; margin-top: 1px; border: 1px solid var(--line-dark-2); display: grid; place-items: center; background: var(--paper); transition: background .18s var(--ease), border-color .18s var(--ease); }
+    .opt.radio .mk { border-radius: 50%; }
+    .opt .mk::after { content: ""; width: 10px; height: 10px; background: var(--white); opacity: 0; transition: opacity .15s var(--ease); }
+    .opt.radio .mk::after { border-radius: 50%; }
+    .opt.check .mk::after { content: "✓"; width: auto; height: auto; color: var(--white); font-size: 12px; line-height: 1; background: none; }
+    .opt .ol { }
+    .opt .ol b { display: block; font-size: 15.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+    .opt .ol span { display: block; margin-top: 4px; color: var(--slate); font-size: 13.5px; line-height: 1.5; }
+    .opt input:checked + .box { border-color: var(--teal); box-shadow: inset 3px 0 0 var(--teal); }
+    .opt input:checked + .box .mk { background: var(--teal); border-color: var(--teal); }
+    .opt input:checked + .box .mk::after { opacity: 1; }
+
+    /* nav buttons */
+    .qnav { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 32px; }
+    .btn-back { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; background: transparent; color: var(--ink); border: 1px solid var(--line-dark-2); font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease); }
+    .btn-back:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .btn-back[disabled] { opacity: .35; cursor: not-allowed; }
+    .btn-next { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 24px; color: var(--white); background: var(--teal); border: 1px solid var(--teal); font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease); }
+    .btn-next:hover { background: var(--cyan); color: var(--navy); border-color: var(--cyan); transform: translateY(-1px); }
+    .btn-next[disabled] { opacity: .4; cursor: not-allowed; transform: none; background: var(--slate); border-color: var(--slate); }
+    .btn-next span { transition: transform .2s var(--ease); }
+    .btn-next:not([disabled]):hover span { transform: translateX(3px); }
+    .hint { text-align: center; margin: 14px 0 0; color: var(--slate-2); font: 500 10.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ------------------------------------------------- results --- */
+    .result-head h2 { margin: 0 0 16px; max-width: 20ch; font: 600 clamp(30px, 4.4vw, 54px)/.92 var(--display); letter-spacing: -.03em; text-transform: uppercase; }
+    .result-head h2 em { color: var(--teal); font-style: normal; }
+    .verdict { padding: 30px clamp(22px, 3vw, 36px); color: var(--white); background: var(--ink); border-top: 3px solid var(--teal); margin: 6px 0 34px; }
+    .verdict .lead-label { font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); }
+    .verdict h3 { margin: 10px 0 14px; font: 600 clamp(26px, 3.4vw, 42px)/.98 var(--display); text-transform: uppercase; letter-spacing: -.02em; }
+    .verdict p { margin: 0; max-width: 74ch; color: #cdd9dd; font-size: 15.5px; line-height: 1.7; }
+    .verdict p + p { margin-top: 12px; }
+    .verdict .close { display: block; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line-light); max-width: 74ch; font: 400 15px/1.62 var(--body); color: #aebfc4; }
+    .verdict .close b { color: var(--white); font-weight: 600; }
+
+    .bars-label { margin: 0 0 6px; font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+    .bars-sub { margin: 0 0 22px; max-width: 68ch; color: var(--slate); font-size: 14.5px; line-height: 1.6; }
+    .bars { display: grid; gap: 16px; margin: 0 0 40px; }
+    .bar-row { }
+    .bar-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 7px; }
+    .bar-name { font: 600 clamp(16px, 1.6vw, 20px)/1 var(--display); text-transform: uppercase; letter-spacing: .01em; color: var(--ink); }
+    .bar-name .rank { display: inline-grid; place-items: center; width: 19px; height: 19px; margin-right: 10px; font: 500 10px var(--mono); color: var(--slate); border: 1px solid var(--line-dark-2); vertical-align: middle; }
+    .bar-row.lead .bar-name .rank { color: var(--white); background: var(--teal); border-color: var(--teal); }
+    .bar-pct { font: 500 12px var(--mono); letter-spacing: .04em; color: var(--slate); }
+    .bar-row.lead .bar-pct { color: var(--teal); font-weight: 600; }
+    .track { height: 16px; background: var(--muted); overflow: hidden; }
+    .track i { display: block; height: 100%; width: 0; background: var(--fill-c, var(--slate)); transition: width .9s var(--ease); }
+    .bar-row.lead .track { box-shadow: inset 0 0 0 1px rgba(18,129,125,.4); }
+    .bar-desc { margin: 8px 0 0; color: var(--slate); font-size: 13px; line-height: 1.55; max-width: 74ch; }
+    .bar-row.lead .bar-desc { color: #33454f; }
+
+    /* result positioning map (2-D: where enforcement runs x who operates it) */
+    .spectrum { margin: 0 0 42px; }
+    .spec-label { margin: 0 0 6px; font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+    .spec-sub { margin: 0 0 26px; max-width: 74ch; color: var(--slate); font-size: 14.5px; line-height: 1.6; }
+    .spec-sub strong { color: var(--ink); font-weight: 650; }
+    .map-row { display: flex; flex-wrap: wrap; gap: 22px 30px; align-items: center; }
+    .map { flex: 1 1 360px; max-width: 540px; }
+    .map-legend { flex: 1 1 190px; max-width: 250px; display: flex; flex-direction: column; gap: 20px; }
+    .legend-item { display: flex; gap: 12px; }
+    .legend-swatch { flex: none; width: 30px; height: 30px; margin-top: 2px; border: 1px solid rgba(18, 129, 125, .45); background: radial-gradient(140% 140% at 100% 100%, rgba(18, 129, 125, .5) 0%, rgba(18, 129, 125, .06) 72%); }
+    .legend-dot { flex: none; width: 16px; height: 16px; margin: 7px; border-radius: 50%; background: var(--cyan); border: 3px solid var(--teal); box-shadow: 0 2px 6px rgba(14, 32, 41, .25); }
+    .legend-text b { display: block; margin-bottom: 4px; font: 600 12.5px var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
+    .legend-text p { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--slate); }
+    .map-grid { display: grid; grid-template-columns: 68px minmax(0, 1fr) 68px; grid-template-rows: auto minmax(0, 1fr) auto; column-gap: 8px; row-gap: 10px; align-items: center; justify-items: center; }
+    .map-pole { text-align: center; font: 500 9px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--slate); line-height: 1.4; }
+    .map-pole b, .map-pole { }
+    .map-top { grid-column: 2; grid-row: 1; }
+    .map-bottom { grid-column: 2; grid-row: 3; }
+    .map-left { grid-column: 1; grid-row: 2; }
+    .map-right { grid-column: 3; grid-row: 2; }
+    .map-top, .map-bottom { font: 600 12.5px var(--display); letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
+    .map-top span, .map-bottom span { display: inline; margin-left: 6px; font: 500 9px var(--mono); letter-spacing: .05em; color: var(--slate); }
+    .map-left b, .map-right b { display: block; font: 600 12.5px var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
+    .map-left span, .map-right span { display: block; margin-top: 2px; font: 500 8.5px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--slate); }
+    /* the plot */
+    .map-plot { grid-column: 2; grid-row: 2; position: relative; width: 100%; aspect-ratio: 1 / 0.84; background: var(--white); border: 1px solid var(--line-dark-2); }
+    .map-cross-v { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-dark); }
+    .map-cross-h { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--line-dark); }
+    /* sovereignty band: bottom half, deepening green toward the bottom-right
+       corner (distributed + fully customer-operated = most control). */
+    .map-sov { position: absolute; left: 0; right: 0; bottom: 0; height: 50%; background: radial-gradient(150% 150% at 100% 100%, rgba(18, 129, 125, .34) 0%, rgba(18, 129, 125, .12) 45%, rgba(18, 129, 125, .03) 78%); border-top: 1px dashed rgba(18, 129, 125, .4); }
+    .map-q { position: absolute; font: 600 10px var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--slate-2); line-height: 1.15; max-width: 46%; }
+    .map-q.tl { top: 9px; left: 10px; }
+    .map-q.tr { top: 9px; right: 10px; text-align: right; }
+    .map-q.bl { bottom: 9px; left: 10px; }
+    .map-q.br { bottom: 9px; right: 10px; text-align: right; }
+    /* the your-result region */
+    .map-you { position: absolute; transform: translate(-50%, -50%); z-index: 5; }
+    .map-you .halo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 118px; height: 118px; border-radius: 50%; background: radial-gradient(circle, rgba(88, 239, 227, .55), rgba(88, 239, 227, 0) 68%); pointer-events: none; }
+    .map-you .pt { position: relative; display: block; width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); border: 3px solid var(--teal); box-shadow: 0 2px 8px rgba(14, 32, 41, .25); }
+    .map-you .tag { position: absolute; left: 50%; top: calc(50% + 16px); transform: translateX(-50%); white-space: nowrap; padding: 4px 10px; background: var(--ink); color: var(--white); font: 500 10px var(--mono); letter-spacing: .07em; text-transform: uppercase; }
+    .map-you.high .tag { top: auto; bottom: calc(50% + 16px); }
+    .map-caption { margin: 20px 0 0; max-width: 72ch; color: #33454f; font-size: 15px; line-height: 1.6; }
+    .map-caption b { color: var(--teal); }
+    .spec-note { margin: 14px 0 0; padding-left: 16px; border-left: 2px solid var(--line-dark-2); max-width: 82ch; color: var(--slate); font-size: 13px; line-height: 1.62; }
+    @media (max-width: 560px) {
+      .map-grid { grid-template-columns: 52px minmax(0, 1fr) 52px; }
+      .map-you .halo { width: 92px; height: 92px; }
+    }
+
+    /* factor breakdown */
+    .factors { margin: 8px 0 40px; }
+    .factors h3 { margin: 0 0 6px; font: 600 clamp(21px, 2.2vw, 30px)/1 var(--display); text-transform: uppercase; letter-spacing: -.015em; }
+    .factors .sub { margin: 0 0 22px; max-width: 66ch; color: var(--slate); font-size: 14.5px; line-height: 1.6; }
+    .factor { padding: 18px 0; border-bottom: 1px solid var(--line-dark); display: grid; grid-template-columns: 210px 1fr; gap: 8px 28px; align-items: start; }
+    .factor:first-of-type { border-top: 1px solid var(--line-dark); }
+    .factor .fq { font: 600 14px var(--display); letter-spacing: .02em; text-transform: uppercase; color: var(--ink); line-height: 1.3; }
+    .factor .fa { color: var(--slate); font-size: 14px; line-height: 1.6; }
+    .factor .fa .ans { color: var(--ink); font-weight: 600; }
+    .factor .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+    .tag-a { font: 500 10px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border: 1px solid; background: var(--white); }
+    .tag-a.dist { color: var(--c-dist); border-color: rgba(18,129,125,.4); }
+    .tag-a.pop { color: var(--c-pop); border-color: rgba(63,111,134,.4); }
+    .tag-a.cust { color: var(--c-cust); border-color: rgba(122,107,176,.45); }
+    .tag-a.endp { color: var(--c-endp); border-color: rgba(192,123,58,.45); }
+    /* the strongest lean per answer is filled, so the main direction reads at a glance */
+    .tag-a.lead { color: var(--white); font-weight: 600; }
+    .tag-a.dist.lead { background: var(--c-dist); border-color: var(--c-dist); }
+    .tag-a.pop.lead  { background: var(--c-pop);  border-color: var(--c-pop); }
+    .tag-a.cust.lead { background: var(--c-cust); border-color: var(--c-cust); }
+    .tag-a.endp.lead { background: var(--c-endp); border-color: var(--c-endp); }
+
+    /* vendor disclosure box */
+    .vendor { margin: 4px 0 36px; padding: 26px clamp(22px, 3vw, 34px); background: var(--muted); border: 1px solid var(--line-dark); border-left: 3px solid var(--teal); }
+    .vendor .disc { font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--slate); }
+    .vendor h3 { margin: 10px 0 10px; font: 600 clamp(20px, 2.1vw, 27px)/1.02 var(--display); text-transform: uppercase; letter-spacing: -.01em; }
+    .vendor p { margin: 0 0 18px; max-width: 74ch; color: var(--slate); font-size: 14.5px; line-height: 1.66; }
+    .vendor .button { color: var(--white); background: var(--teal); border-color: var(--teal); }
+    .vendor .button:hover { color: var(--navy); background: var(--cyan); border-color: var(--cyan); }
+
+    .result-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; padding-top: 8px; }
+    .btn-line { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 20px; background: transparent; color: var(--ink); border: 1px solid var(--line-dark-2); font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease); }
+    .btn-line:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+    /* footer */
+    .site-footer { color: var(--white); background: var(--navy); border-top: 1px solid var(--line-light); margin-top: 20px; }
+    .footer-inner { max-width: var(--shell); margin: 0 auto; padding: clamp(40px, 5vw, 64px) clamp(24px, 5vw, 84px) 30px; }
+    .footer-inner .note { max-width: 64ch; margin: 0 0 26px; color: #93aeb4; font-size: 14px; line-height: 1.7; }
+    .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 22px; border-top: 1px solid var(--line-light); color: var(--slate-2); font: 400 11.5px var(--mono); letter-spacing: .06em; }
+    .footer-base a { color: #b3c9ce; text-decoration: none; }
+    .footer-base a:hover { color: var(--cyan); }
+
+    /* animation entrance */
+    .anim-in { animation: fade .4s var(--ease) both; }
+    @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    /* ------------------------------------------------ responsive --- */
+    @media (max-width: 720px) {
+      .topnav .hide-sm { display: none; }
+      .opts.two { grid-template-columns: 1fr; }
+      .facts { grid-template-columns: 1fr; }
+      .factor { grid-template-columns: 1fr; gap: 4px; }
+      .verdict { padding: 24px 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================ HEADER -->
+  <header class="topbar">
+    <a class="brand" href="sase-explained.html"><span class="brand-mark">S/</span>SASE.NET</a>
+    <nav class="topnav" aria-label="Primary">
+      <a class="hide-sm" href="sase-explained.html#enforcement">The architecture</a>
+      <a class="button button-teal" href="sase-explained.html">The SASE guide <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <!-- ============================================================ HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Interactive tool</p>
+      <h1>SASE architecture <em>assessment.</em></h1>
+      <p>Seven quick questions across four short stages: your users and sites, your traffic and data, resilience, and operations. In return, a neutral, personalized framework for weighing the four ways SASE enforcement can be delivered: cloud-PoP, customer-controlled, endpoint-native, and distributed.</p>
+      <p>No sign-up. Everything runs in your browser, so your answers never leave this page.</p>
+      <div class="hero-actions">
+        <button class="button js-start" type="button">Start the assessment <span aria-hidden="true">→</span></button>
+        <a class="tlink" href="sase-explained.html">Read the SASE guide first →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ PROGRESS RAIL (quiz only) -->
+  <div class="progress" id="progress" hidden aria-hidden="true">
+    <div class="progress-inner">
+      <div class="progress-top">
+        <span class="progress-stage" id="stageName">Stage 1 of 4 · Environment</span>
+        <span class="progress-count"><b id="qPct">0</b>% complete</span>
+      </div>
+      <div class="stages" id="stages" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ APP -->
+  <main class="wrap">
+
+    <!-- INTRO SCREEN -->
+    <section class="screen intro" id="scr-intro">
+      <p class="kicker">Before you sign anything</p>
+      <h2>Which SASE approach actually fits <em>your environment?</em></h2>
+      <p class="lede">Feature sheets look identical; architectures do not. This tool asks about where your users, apps, and workloads live, how your traffic must be handled, and who runs it, then shows how well each enforcement approach fits, with the reasoning behind every point.</p>
+      <div class="facts">
+        <div class="fact"><div class="n">7</div><div class="t">questions across <b>4 short stages</b>, about ninety seconds</div></div>
+        <div class="fact"><div class="n">4</div><div class="t">approaches weighed <b>neutrally</b>: cloud-PoP, customer-controlled, endpoint, distributed</div></div>
+        <div class="fact"><div class="n">0</div><div class="t">data sent anywhere. <b>Scoring happens in your browser</b></div></div>
+      </div>
+      <div class="intro-actions">
+        <button class="button button-teal js-start" id="startBtn" type="button">Start the assessment <span aria-hidden="true">→</span></button>
+        <a class="tlink" href="sase-explained.html">Read the SASE guide first →</a>
+      </div>
+      <div class="privacy">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1l5.5 2.2v3.3c0 3.4-2.3 6.5-5.5 7.5-3.2-1-5.5-4.1-5.5-7.5V3.2L8 1z" stroke="#12817d" stroke-width="1.2" stroke-linejoin="round"/><path d="M5.6 8l1.7 1.7L10.6 6" stroke="#12817d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>This is an educational tool, not a sales funnel. It has no "right" answer. If your environment favors a vendor cloud PoP, it will say so.</span>
+      </div>
+    </section>
+
+    <!-- STAGE SCREEN (rendered by JS, one stage's questions per page) -->
+    <section class="screen" id="scr-quiz" hidden>
+      <div class="stage-intro">
+        <p class="stage-eyebrow" id="stageEyebrow">Stage 1 of 4</p>
+        <h2 class="stage-title" id="stageTitle"></h2>
+        <p class="stage-desc" id="stageDesc"></p>
+      </div>
+      <div id="questions"></div>
+      <div class="qnav">
+        <button class="btn-back" id="backBtn" type="button">← Back</button>
+        <button class="btn-next" id="nextBtn" type="button" disabled>Next <span aria-hidden="true">→</span></button>
+      </div>
+      <p class="hint" id="hint"></p>
+    </section>
+
+    <!-- RESULTS SCREEN (rendered by JS) -->
+    <section class="screen" id="scr-result" hidden>
+      <div class="result-head">
+        <p class="kicker">Your result</p>
+        <h2 id="resultTitle">Your SASE fit <em>framework.</em></h2>
+      </div>
+
+      <div class="verdict" id="verdict"></div>
+
+      <div class="spectrum" id="spectrum">
+        <p class="spec-label">Where your answers point</p>
+        <p class="spec-sub">SASE architectures differ on two things. First, <em>where</em> enforcement runs: in a vendor's central cloud, or locally across your users, sites, and workloads. Second, <em>who</em> operates it: the vendor, or you. Together they set how much <strong>sovereignty</strong> you keep, meaning control over where your traffic, logs, and keys are handled.</p>
+        <div class="map-row">
+          <div class="map">
+            <div class="map-grid">
+              <div class="map-pole map-top">Vendor-operated <span>cloud-delivered</span></div>
+              <div class="map-pole map-left"><b>Central</b><span>one cloud</span></div>
+              <div class="map-plot" id="mapPlot">
+                <div class="map-cross-v" aria-hidden="true"></div>
+                <div class="map-cross-h" aria-hidden="true"></div>
+                <div class="map-sov" aria-hidden="true"></div>
+                <span class="map-q tl">Centralized<br>vendor cloud</span>
+                <span class="map-q tr">Vendor-run<br>distributed edge</span>
+                <span class="map-q bl">Self-hosted<br>central gateway</span>
+                <span class="map-q br">Distributed,<br>self-managed</span>
+                <!-- your-result region injected here -->
+              </div>
+              <div class="map-pole map-right"><b>Distributed</b><span>local edges</span></div>
+              <div class="map-pole map-bottom">Customer-operated <span>self-hosted / on-prem</span></div>
+            </div>
+          </div>
+          <aside class="map-legend">
+            <div class="legend-item">
+              <span class="legend-swatch" aria-hidden="true"></span>
+              <div class="legend-text">
+                <b>Sovereignty-friendly</b>
+                <p>The lower a result sits, the more of your traffic, logs, and keys stay under your control. It is strongest in the bottom right, where enforcement is distributed and run by you.</p>
+              </div>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" aria-hidden="true"></span>
+              <div class="legend-text">
+                <b>Your result</b>
+                <p>The highlighted area shows the kind of architecture your answers point to.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <p class="map-caption" id="mapCaption">Your answers point to this area: the <b>kind</b> of architecture that fits, rather than a specific product.</p>
+        <p class="spec-note">This is a positioning map, not a ranking or a product match. No corner is "better" than another, and most real environments are a blend. Treat the highlighted area as a starting point. Vendors are left off on purpose, because where a platform can sit is often configurable and its default is rarely its only option.</p>
+      </div>
+
+      <p class="bars-label">Fit across the four approaches</p>
+      <p class="bars-sub">Each approach is scored on how well it matches the environment you described, then ranked. These are aids to a decision, not a verdict. Many organizations run a hybrid.</p>
+      <div class="bars" id="bars"></div>
+
+      <div class="factors">
+        <h3>How your answers shaped this</h3>
+        <p class="sub">Every answer nudges the scores. Here is what each one contributed, so nothing is a black box.</p>
+        <div id="factors"></div>
+      </div>
+
+      <div class="vendor" id="vendor">
+        <span class="disc">Vendor example · disclosed</span>
+        <h3 id="vendorTitle">See a distributed SASE architecture in practice</h3>
+        <p id="vendorBody">SASE.net is published by Zenarmor, a provider of distributed SASE. If you want to see how one platform places enforcement across endpoints, gateways, cloud, containers, and compatible ISP/CPE devices under one central policy, this is a concrete example, shown for illustration and not as an endorsement.</p>
+        <a class="button" href="#" id="vendorLink">See how Zenarmor implements distributed SASE <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <div class="result-actions">
+        <a class="btn-line" href="sase-explained.html">← Back to the SASE guide</a>
+        <button class="btn-line" id="retakeBtn" type="button">Retake the assessment ↻</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================ FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="note">A vendor-neutral tool to help you weigh SASE enforcement approaches. It offers a framework, not advice. Your environment and requirements decide. Published by Zenarmor; vendor names are examples, not endorsements.</p>
+      <div class="footer-base">
+        <span>© <span data-year>2026</span> SASE.net · Runs entirely in your browser</span>
+        <a href="sase-explained.html">The SASE guide ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+    /* ---- approach metadata -------------------------------------------- */
+    var APPROACHES = {
+      pop:  { key: "pop",  name: "Vendor cloud PoP", cls: "pop",  color: "var(--c-pop)",
+              desc: "Centralized enforcement in the vendor's cloud points of presence, where the vendor runs the infrastructure and inspects your traffic." },
+      cust: { key: "cust", name: "Customer-controlled", cls: "cust", color: "var(--c-cust)",
+              desc: "Enforcement inside infrastructure you control, such as your own cloud, VPCs, containers, or a dedicated hosted gateway, keeping inspection where you choose." },
+      endp: { key: "endp", name: "Endpoint-native", cls: "endp", color: "var(--c-endp)",
+              desc: "Enforcement on the device itself, so protection follows each user across home, mobile, and public networks without a detour." },
+      dist: { key: "dist", name: "Distributed", cls: "dist", color: "var(--c-dist)",
+              desc: "Enforcement placed across endpoints, gateways, branches, cloud, containers, and CPE at once, governed by one central policy and console." }
+    };
+    var ORDER = ["pop", "cust", "endp", "dist"];
+
+    /* 2-D positioning map. x: 0 = central vendor cloud → 100 = local/distributed.
+       y: 0 = vendor-operated (cloud, top) → 100 = customer-operated (self-hosted,
+       bottom). Each approach anchors at an (x, y); the reader's result is a
+       cubed-fit-weighted blend of these, a REGION, not a product match.      */
+    var APPROACH_XY = {
+      pop:  { x: 12, y: 16 },   // central + vendor-run  (top-left)
+      cust: { x: 46, y: 82 },   // control-first         (bottom-center)
+      endp: { x: 82, y: 56 },   // local, on the device  (right, mid)
+      dist: { x: 80, y: 80 }    // distributed + self-managed (bottom-right)
+    };
+
+    /* ---- stages (one page each) --------------------------------------- */
+    var STAGES = [
+      { name: "Environment", title: "Your environment",
+        desc: "Where your users, apps, and workloads live. This is the biggest driver of which enforcement approach fits." },
+      { name: "Traffic & data", title: "Traffic & data",
+        desc: "How your traffic must be handled, and how much control you need over where it is inspected and stored." },
+      { name: "Resilience & stack", title: "Resilience & existing stack",
+        desc: "What has to keep working, and what you already run that could carry enforcement." },
+      { name: "Operations", title: "Operations",
+        desc: "Who will run it day to day. Last one." }
+    ];
+
+    /* ---- questions ---------------------------------------------------- */
+    /* Each option carries a score vector {pop,cust,endp,dist} and a `why`.
+       Scoring is normalized against each approach's own maximum, so an
+       approach is never penalized for appearing in fewer options.        */
+    var QUESTIONS = [
+      { id: "locations", stage: 0, type: "single",
+        short: "Where things live",
+        title: "Where do your users, apps, and workloads mostly live?",
+        help: "The shape of your environment is the single biggest driver of which enforcement approach fits.",
+        options: [
+          { label: "One main site", desc: "Most people and systems sit at a single office or data center.",
+            why: "A single location concentrates traffic, so centralized inspection is efficient and easy to run.",
+            s: { pop: 3, cust: 2, endp: 0, dist: 0 } },
+          { label: "Headquarters plus a few branches", desc: "A central site with several smaller offices.",
+            why: "Multiple sites reward enforcement placed at each edge while policy stays central.",
+            s: { pop: 2, cust: 1, endp: 1, dist: 3 } },
+          { label: "Highly distributed", desc: "Many sites, remote staff, and workloads spread across clouds.",
+            why: "When traffic originates everywhere, one central chokepoint adds detours; enforcement spread across points fits better.",
+            s: { pop: 1, cust: 1, endp: 2, dist: 3 } },
+          { label: "Mostly remote / roaming", desc: "A workforce that connects from anywhere, few fixed sites.",
+            why: "Roaming users are best protected where they are, on the device or via a nearby cloud PoP.",
+            s: { pop: 2, cust: 0, endp: 3, dist: 2 } }
+        ] },
+
+      { id: "inventory", stage: 0, type: "multi",
+        short: "What's in play",
+        title: "Which of these are part of your environment?",
+        help: "Select every one that applies. Different asset types are protected best in different places.",
+        options: [
+          { label: "Branch offices", desc: "Physical sites with their own local network.",
+            why: "Branches favor enforcement on a local gateway rather than backhauling all traffic.",
+            s: { pop: 1, cust: 1, endp: 0, dist: 3 } },
+          { label: "Remote employees or contractors", desc: "People working outside a managed office.",
+            why: "Remote and third-party users are covered well by endpoint enforcement or a vendor tunnel.",
+            s: { pop: 2, cust: 0, endp: 3, dist: 2 } },
+          { label: "Cloud workloads / VPCs", desc: "Applications running in public or private cloud.",
+            why: "Inspecting inside your own cloud keeps workload traffic close to the workload.",
+            s: { pop: 1, cust: 3, endp: 0, dist: 2 } },
+          { label: "Containers", desc: "Kubernetes or other containerized services.",
+            why: "Container-native enforcement lives alongside the workload you control.",
+            s: { pop: 0, cust: 3, endp: 0, dist: 2 } },
+          { label: "ISP / CPE devices", desc: "Provider-managed customer-edge equipment.",
+            why: "Compatible ISP/CPE devices can carry enforcement at the customer edge, a distributed pattern.",
+            s: { pop: 0, cust: 1, endp: 0, dist: 3 } },
+          { label: "IoT, OT, or legacy devices", desc: "Systems that cannot run a security agent.",
+            why: "Agentless devices must be protected at a network edge, not on the endpoint.",
+            s: { pop: 1, cust: 1, endp: 0, dist: 3 } }
+        ] },
+
+      { id: "datacontrol", stage: 1, type: "single",
+        short: "Data control",
+        title: "How much control do you need over where traffic is inspected and stored?",
+        help: "This combines two things vendors treat separately: whether your traffic can be inspected on a third party's infrastructure, and any privacy, residency, or sovereignty rules on where data, logs, and keys are handled.",
+        options: [
+          { label: "Little; vendor infrastructure is fine", desc: "We're comfortable with traffic inspected in a vendor's cloud, and have no strict residency rules.",
+            why: "Comfort with vendor-cloud inspection and no residency limits makes a cloud PoP the simplest path.",
+            s: { pop: 3, cust: 0, endp: 1, dist: 1 } },
+          { label: "Some; keep sensitive traffic closer", desc: "General traffic can use vendor infrastructure, but sensitive flows or certain regions should stay closer to home.",
+            why: "A mixed need favors placing enforcement selectively rather than routing everything through one cloud.",
+            s: { pop: 1, cust: 2, endp: 1, dist: 3 } },
+          { label: "Strict; inspection and data stay under our control", desc: "Regulatory, sovereignty, or residency rules require inspection, logs, and keys to stay on infrastructure and in jurisdictions we choose.",
+            why: "Strict sovereignty needs inspection, logs, and keys kept where you choose, which is hard to guarantee in a shared vendor cloud.",
+            s: { pop: 0, cust: 3, endp: 1, dist: 3 } }
+        ] },
+
+      { id: "latency", stage: 1, type: "single",
+        short: "Latency sensitivity",
+        title: "How sensitive is your traffic to added latency?",
+        help: "Routing through a distant or congested PoP adds hops. Local inline inspection avoids the detour.",
+        options: [
+          { label: "Not very", desc: "A little added delay is acceptable for our applications.",
+            why: "Latency tolerance removes the main penalty of routing through a central PoP.",
+            s: { pop: 3, cust: 1, endp: 1, dist: 1 } },
+          { label: "Somewhat", desc: "Noticeable delay would affect some users or apps.",
+            why: "Moderate sensitivity favors inspecting closer to the source than a mandatory PoP hop.",
+            s: { pop: 1, cust: 1, endp: 2, dist: 3 } },
+          { label: "Very", desc: "Real-time or high-volume traffic where every millisecond counts.",
+            why: "Latency-critical traffic benefits most from enforcement at or near its source.",
+            s: { pop: 0, cust: 2, endp: 3, dist: 3 } }
+        ] },
+
+      { id: "resilience", stage: 2, type: "single",
+        short: "Offline resilience",
+        title: "Must protection keep working if a cloud service is unreachable?",
+        help: "Some designs phone home for every decision; others let each edge keep enforcing from a local copy of policy.",
+        options: [
+          { label: "Not critical", desc: "A brief dependency on a cloud control plane is acceptable.",
+            why: "If short cloud dependencies are tolerable, a vendor-run cloud model is unproblematic.",
+            s: { pop: 3, cust: 1, endp: 1, dist: 1 } },
+          { label: "Strongly preferred", desc: "We'd rather protection degrade gracefully than fail.",
+            why: "Wanting graceful degradation favors enforcement that holds policy locally.",
+            s: { pop: 1, cust: 2, endp: 2, dist: 3 } },
+          { label: "Yes; it must keep enforcing offline", desc: "Enforcement cannot stop when a link or service drops.",
+            why: "Continuous offline enforcement needs each edge to hold its own policy, a distributed design that keeps working locally.",
+            s: { pop: 0, cust: 2, endp: 2, dist: 3 } }
+        ] },
+
+      { id: "existing", stage: 2, type: "multi",
+        short: "Existing stack",
+        title: "What security infrastructure do you already run?",
+        help: "Select all that apply. Reusing what you own can avoid a rip-and-replace migration.",
+        options: [
+          { label: "Firewalls / gateways at sites", desc: "Appliances or virtual gateways already deployed.",
+            why: "Existing gateways can host enforcement, favoring distributed and self-controlled placement.",
+            s: { pop: 0, cust: 2, endp: 0, dist: 3 } },
+          { label: "ISP / CPE devices", desc: "Provider-managed edge devices in place.",
+            why: "Compatible CPE can deliver enforcement at the customer edge without new hardware.",
+            s: { pop: 0, cust: 1, endp: 0, dist: 3 } },
+          { label: "Cloud infrastructure / containers", desc: "Established cloud accounts or clusters.",
+            why: "Cloud footprint you own is a natural home for customer-controlled, in-line enforcement.",
+            s: { pop: 0, cust: 3, endp: 0, dist: 2 } },
+          { label: "Mostly endpoints, little network gear", desc: "Laptops and devices, minimal on-prem network kit.",
+            why: "An endpoint-heavy estate suits endpoint-native enforcement or a cloud service.",
+            s: { pop: 2, cust: 0, endp: 3, dist: 1 } },
+          { label: "Starting fresh / minimal", desc: "Little existing security infrastructure to build on.",
+            why: "A clean slate lowers the cost of adopting a turnkey vendor cloud.",
+            s: { pop: 3, cust: 0, endp: 1, dist: 1 } }
+        ] },
+
+      { id: "manage", stage: 3, type: "single",
+        short: "Who runs it",
+        title: "Who will manage the deployment?",
+        help: "The operating model shapes how much you want to run yourself versus hand to a vendor.",
+        options: [
+          { label: "Our internal team", desc: "We'll own operations day to day.",
+            why: "An internal team can operate self-controlled or distributed enforcement directly.",
+            s: { pop: 1, cust: 2, endp: 1, dist: 2 } },
+          { label: "An MSP or MSSP", desc: "A managed security partner runs it for us.",
+            why: "Managed providers often deliver enforcement across many customer edges from one console.",
+            s: { pop: 1, cust: 1, endp: 1, dist: 3 } },
+          { label: "Our ISP / service provider", desc: "Delivered through the provider's own infrastructure.",
+            why: "ISP-delivered security naturally lives on customer-edge devices, a distributed pattern.",
+            s: { pop: 1, cust: 1, endp: 0, dist: 3 } },
+          { label: "We'd rather the vendor run all of it", desc: "Minimal operational burden on us.",
+            why: "Preferring a hands-off model points to a vendor-operated cloud service.",
+            s: { pop: 3, cust: 0, endp: 1, dist: 1 } }
+        ] }
+    ];
+
+    /* precompute each approach's maximum possible score for normalization */
+    var MAXS = { pop: 0, cust: 0, endp: 0, dist: 0 };
+    QUESTIONS.forEach(function (q) {
+      ORDER.forEach(function (k) {
+        if (q.type === "multi") {
+          q.options.forEach(function (o) { MAXS[k] += o.s[k]; });
+        } else {
+          var m = 0;
+          q.options.forEach(function (o) { if (o.s[k] > m) m = o.s[k]; });
+          MAXS[k] += m;
+        }
+      });
+    });
+
+    /* ---- state -------------------------------------------------------- */
+    var answers = {};              // qid -> index (single) or [indices] (multi)
+    var idx = 0;                   // current STAGE index (one stage per page)
+    var TOTAL = QUESTIONS.length;  // total questions (for scoring + overall %)
+    var STAGE_COUNT = STAGES.length;
+    var stageQuestions = STAGES.map(function (s, i) {
+      return QUESTIONS.filter(function (q) { return q.stage === i; });
+    });
+
+    var el = {
+      progress: document.getElementById("progress"),
+      stageName: document.getElementById("stageName"),
+      qPct: document.getElementById("qPct"),
+      stages: document.getElementById("stages"),
+      hero: document.getElementById("hero"),
+      scrIntro: document.getElementById("scr-intro"),
+      scrQuiz: document.getElementById("scr-quiz"),
+      scrResult: document.getElementById("scr-result"),
+      stageEyebrow: document.getElementById("stageEyebrow"),
+      stageTitle: document.getElementById("stageTitle"),
+      stageDesc: document.getElementById("stageDesc"),
+      questions: document.getElementById("questions"),
+      backBtn: document.getElementById("backBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      hint: document.getElementById("hint"),
+      verdict: document.getElementById("verdict"),
+      bars: document.getElementById("bars"),
+      factors: document.getElementById("factors"),
+      vendor: document.getElementById("vendor"),
+      vendorTitle: document.getElementById("vendorTitle"),
+      vendorBody: document.getElementById("vendorBody")
+    };
+    /* build the stage segments once, one per page */
+    STAGES.forEach(function (s, i) {
+      var pip = document.createElement("div");
+      pip.className = "stage-pip";
+      pip.dataset.stage = i;
+      pip.innerHTML =
+        '<div class="bar"><i></i></div>' +
+        '<div class="lb"><span class="tick" aria-hidden="true"></span><span class="txt">' +
+        (i + 1) + ' · ' + s.name + '</span></div>';
+      el.stages.appendChild(pip);
+    });
+
+    function isAnswered(qid) {
+      var v = answers[qid];
+      if (v === undefined) return false;
+      if (Array.isArray(v)) return v.length > 0;
+      return true;
+    }
+    function stageComplete(i) {
+      return stageQuestions[i].every(function (q) { return isAnswered(q.id); });
+    }
+
+    /* ---- rendering ---------------------------------------------------- */
+    function updateProgress() {
+      el.stageName.textContent = "Stage " + (idx + 1) + " of " + STAGE_COUNT + " · " + STAGES[idx].name;
+      var answered = QUESTIONS.filter(function (q) { return isAnswered(q.id); }).length;
+      el.qPct.textContent = Math.round((answered / TOTAL) * 100);
+
+      STAGES.forEach(function (s, i) {
+        var pip = el.stages.children[i];
+        pip.classList.toggle("current", i === idx);
+        pip.classList.toggle("done", i !== idx && stageComplete(i));
+      });
+    }
+
+    function renderStage() {
+      var stage = STAGES[idx];
+      el.stageEyebrow.textContent = "Stage " + (idx + 1) + " of " + STAGE_COUNT;
+      el.stageTitle.textContent = stage.title;
+      el.stageDesc.textContent = stage.desc;
+      el.questions.innerHTML = "";
+
+      var qs = stageQuestions[idx];
+      var hasMulti = false;
+
+      qs.forEach(function (q) {
+        var multi = q.type === "multi";
+        if (multi) hasMulti = true;
+        var globalNum = QUESTIONS.indexOf(q) + 1;
+        var current = answers[q.id];
+
+        var block = document.createElement("div");
+        block.className = "qblock";
+        var optsCls = "opts" + (q.options.length >= 5 ? " two" : "");
+        var titleId = "qt_" + q.id;
+
+        var optsHTML = q.options.map(function (o, i) {
+          var checked = multi ? (Array.isArray(current) && current.indexOf(i) !== -1) : (current === i);
+          return '<label class="opt ' + (multi ? "check" : "radio") + '">' +
+            '<input type="' + (multi ? "checkbox" : "radio") + '" name="q_' + q.id + '" value="' + i + '"' +
+            (checked ? " checked" : "") + '>' +
+            '<span class="box"><span class="mk" aria-hidden="true"></span>' +
+            '<span class="ol"><b>' + o.label + '</b><span>' + o.desc + '</span></span></span></label>';
+        }).join("");
+
+        block.innerHTML =
+          '<div class="q-head"><span class="q-num">Question ' + globalNum + '</span>' +
+          '<span class="q-kind">' + (multi ? "Select all that apply" : "Select one") + '</span></div>' +
+          '<h3 class="q-title" id="' + titleId + '">' + q.title + '</h3>' +
+          '<p class="q-help">' + q.help + '</p>' +
+          '<div class="' + optsCls + '" role="group" aria-labelledby="' + titleId + '">' + optsHTML + '</div>';
+        el.questions.appendChild(block);
+
+        var optsWrap = block.querySelector(".opts");
+        optsWrap.querySelectorAll("input").forEach(function (inp) {
+          inp.addEventListener("change", function () { onAnswer(q, multi, optsWrap); });
+        });
+      });
+
+      el.backBtn.disabled = idx === 0;
+      el.hint.textContent = hasMulti
+        ? "Some questions accept more than one answer. Nothing is stored or sent."
+        : "";
+      refreshNext();
+
+      var first = el.questions.querySelector("input");
+      if (first) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
+      scrollToQuiz();
+    }
+
+    var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // The hero is hidden during the quiz/result, so the stage sits at the top
+    // naturally, just return to the top of the (short) document on each step.
+    function scrollToQuiz() {
+      window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" });
+    }
+
+    function onAnswer(q, multi, optsWrap) {
+      if (multi) {
+        var chosen = [];
+        optsWrap.querySelectorAll("input:checked").forEach(function (inp) { chosen.push(parseInt(inp.value, 10)); });
+        answers[q.id] = chosen;
+      } else {
+        var sel = optsWrap.querySelector("input:checked");
+        answers[q.id] = sel ? parseInt(sel.value, 10) : undefined;
+      }
+      refreshNext();
+      updateProgress();
+    }
+
+    function refreshNext() {
+      el.nextBtn.disabled = !stageComplete(idx);
+      el.nextBtn.querySelector("span").previousSibling.textContent =
+        (idx === STAGE_COUNT - 1) ? "See my result " : "Next ";
+    }
+
+    /* ---- navigation --------------------------------------------------- */
+    function goTo(i) {
+      idx = i;
+      renderStage();
+      updateProgress();
+    }
+    function startQuiz() {
+      el.hero.hidden = true;
+      el.scrIntro.hidden = true;
+      el.scrResult.hidden = true;
+      el.scrQuiz.hidden = false;
+      el.progress.hidden = false;
+      el.progress.setAttribute("aria-hidden", "false");
+      el.scrQuiz.classList.remove("anim-in"); void el.scrQuiz.offsetWidth; el.scrQuiz.classList.add("anim-in");
+      goTo(0);
+    }
+
+    document.querySelectorAll(".js-start").forEach(function (b) { b.addEventListener("click", startQuiz); });
+    el.backBtn.addEventListener("click", function () { if (idx > 0) goTo(idx - 1); });
+    el.nextBtn.addEventListener("click", function () {
+      if (!stageComplete(idx)) return;
+      if (idx < STAGE_COUNT - 1) goTo(idx + 1);
+      else showResult();
+    });
+    document.getElementById("retakeBtn").addEventListener("click", function () {
+      answers = {};
+      el.scrResult.hidden = true;
+      startQuiz();
+    });
+
+    /* ---- scoring ------------------------------------------------------ */
+    function score() {
+      var raw = { pop: 0, cust: 0, endp: 0, dist: 0 };
+      QUESTIONS.forEach(function (q) {
+        var v = answers[q.id];
+        if (v === undefined) return;
+        var picks = Array.isArray(v) ? v : [v];
+        picks.forEach(function (i) {
+          var o = q.options[i];
+          if (!o) return;
+          ORDER.forEach(function (k) { raw[k] += o.s[k]; });
+        });
+      });
+      // normalize to 0-100 against each approach's own max
+      var pct = {};
+      ORDER.forEach(function (k) {
+        pct[k] = MAXS[k] > 0 ? Math.round((raw[k] / MAXS[k]) * 100) : 0;
+      });
+      return pct;
+    }
+
+    /* leader-specific verdict copy */
+    var VERDICTS = {
+      pop: {
+        headline: "A vendor cloud-PoP approach fits your environment",
+        body: ["Your answers point most clearly toward centralized, vendor-operated enforcement. With enforcement concentrated in the vendor's cloud points of presence, you get a turnkey service the vendor runs for you. It is a sensible fit when users sit near available PoPs, added latency is tolerable, and routing traffic through vendor infrastructure is acceptable.",
+               "Worth confirming before you commit: how traffic behaves when your assigned PoP is distant or congested, and where your traffic is decrypted and your logs and keys are stored."]
+      },
+      cust: {
+        headline: "A customer-controlled approach fits your environment",
+        body: ["Your answers favor keeping enforcement on infrastructure you control, such as your own cloud, VPCs, containers, or a dedicated hosted gateway. That keeps inspection, logs, and keys where you choose, which matters most when sovereignty, residency, or third-party-transit concerns are in play.",
+               "This approach asks more of your team operationally than a fully vendor-run cloud, so weigh it against who will manage day-to-day enforcement."]
+      },
+      endp: {
+        headline: "An endpoint-native approach fits your environment",
+        body: ["Your answers lean toward enforcement on the device itself. With a mostly remote or roaming workforce and an endpoint-heavy estate, running protection on the endpoint keeps it with the user across home, mobile, and public networks, with no mandatory detour through a central point.",
+               "Bear in mind endpoint-only enforcement can't cover devices that won't run an agent (IoT, OT, legacy, some servers), so check whether you also need enforcement at a network edge."]
+      },
+      dist: {
+        headline: "A distributed SASE architecture fits your environment",
+        body: ["Your environment may be best suited to a distributed SASE architecture that places enforcement closer to users, branches, and workloads while maintaining centralized policy and visibility. Because your users, sites, and workloads are spread out, and your requirements around latency, resilience, sovereignty, or reusing existing gear all point the same way, no single central chokepoint serves everything well.",
+               "Distributed does not mean endpoint-only: enforcement can sit on endpoints, gateways, ISP/CPE devices, and inside your cloud and containers at once, all under one policy."]
+      }
+    };
+
+    // Place the reader's result region on the 2-D map. Position is a cubed-fit-
+    // weighted blend of the four approach anchors, so the dominant approach leads
+    // while a close second still shifts it. It is a REGION, not a product match.
+    function renderMap(pct) {
+      var plot = document.getElementById("mapPlot");
+      if (!plot) return;
+      plot.querySelectorAll(".map-you").forEach(function (n) { n.remove(); });
+
+      var nx = 0, ny = 0, den = 0;
+      ORDER.forEach(function (k) {
+        var w = pct[k] * pct[k] * pct[k];
+        nx += w * APPROACH_XY[k].x; ny += w * APPROACH_XY[k].y; den += w;
+      });
+      var x = den > 0 ? nx / den : 50;
+      var y = den > 0 ? ny / den : 50;
+      x = Math.max(14, Math.min(86, x));
+      y = Math.max(15, Math.min(84, y));
+
+      var you = document.createElement("div");
+      you.className = "map-you" + (y > 62 ? " high" : "");  // flip tag above the dot when low on the plot
+      you.style.left = x + "%";
+      you.style.top = y + "%";
+      you.innerHTML = '<span class="halo"></span><span class="pt"></span><span class="tag">Your result</span>';
+      plot.appendChild(you);
+    }
+
+    function showResult() {
+      var pct = score();
+      var ranked = ORDER.slice().sort(function (a, b) {
+        if (pct[b] !== pct[a]) return pct[b] - pct[a];
+        return ORDER.indexOf(a) - ORDER.indexOf(b);
+      });
+      var leader = ranked[0];
+      var runnerGap = pct[ranked[0]] - pct[ranked[1]];
+
+      // verdict
+      var v = VERDICTS[leader];
+      var closeLine = runnerGap <= 6
+        ? 'It is close: <b>' + APPROACHES[leader].name + '</b> and <b>' + APPROACHES[ranked[1]].name +
+          '</b> score within a few points, so a hybrid of the two is well worth considering.'
+        : 'A hybrid across approaches is common, so treat this as a starting point, not a verdict.';
+      el.verdict.innerHTML =
+        '<span class="lead-label">Best-fit approach</span>' +
+        '<h3>' + v.headline + '</h3>' +
+        v.body.map(function (p) { return '<p>' + p + '</p>'; }).join("") +
+        '<span class="close">' + closeLine + '</span>';
+
+      // bars
+      el.bars.innerHTML = "";
+      ranked.forEach(function (k, r) {
+        var a = APPROACHES[k];
+        var row = document.createElement("div");
+        row.className = "bar-row" + (r === 0 ? " lead" : "");
+        row.innerHTML =
+          '<div class="bar-top">' +
+            '<span class="bar-name"><span class="rank">' + (r + 1) + '</span>' + a.name + '</span>' +
+            '<span class="bar-pct">' + pct[k] + '% fit</span>' +
+          '</div>' +
+          '<div class="track"><i style="--fill-c:' + a.color + '"></i></div>' +
+          '<p class="bar-desc">' + a.desc + '</p>';
+        el.bars.appendChild(row);
+        // animate width after insertion
+        var bar = row.querySelector(".track i");
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { bar.style.width = Math.max(pct[k], 2) + "%"; });
+        });
+      });
+
+      // positioning map
+      renderMap(pct);
+
+      // factor breakdown
+      el.factors.innerHTML = "";
+      QUESTIONS.forEach(function (q) {
+        var val = answers[q.id];
+        if (val === undefined) return;
+        var picks = Array.isArray(val) ? val : [val];
+        if (picks.length === 0) return;
+
+        var ansText = picks.map(function (i) { return q.options[i].label; }).join(", ");
+        var whys = picks.map(function (i) { return q.options[i].why; });
+        // which approaches this answer leans toward. Kept in a FIXED order
+        // (ORDER) so the same tags never shuffle between rows; only the single
+        // strongest lean is color-filled to stand out.
+        var agg = { pop: 0, cust: 0, endp: 0, dist: 0 };
+        picks.forEach(function (i) { ORDER.forEach(function (kk) { agg[kk] += q.options[i].s[kk]; }); });
+        var favored = ORDER.filter(function (kk) { return agg[kk] > 0; });
+        var maxK = favored.reduce(function (a, b) { return agg[b] > agg[a] ? b : a; }, favored[0]);
+
+        var row = document.createElement("div");
+        row.className = "factor";
+        row.innerHTML =
+          '<div class="fq">' + q.short + '</div>' +
+          '<div class="fa"><span class="ans">' + ansText + '</span>. ' + whys.join(" ") +
+          '<div class="tags">' + favored.map(function (kk) {
+            return '<span class="tag-a ' + APPROACHES[kk].cls + (kk === maxK ? ' lead' : '') + '">Leans ' + APPROACHES[kk].name + '</span>';
+          }).join("") + '</div></div>';
+        el.factors.appendChild(row);
+      });
+
+      // vendor box wording adapts to whether distributed actually won
+      if (leader === "dist") {
+        el.vendorTitle.textContent = "See a distributed SASE architecture in practice";
+        el.vendorBody.textContent = "Since your result points to distributed enforcement, here is one concrete example of it. SASE.net is published by Zenarmor, whose platform places enforcement across endpoints, gateways, cloud, containers, and compatible ISP/CPE devices under one central policy. Shown for illustration, not as an endorsement, and separate from the neutral scoring above.";
+      } else {
+        el.vendorTitle.textContent = "For contrast: how a distributed architecture is built";
+        el.vendorBody.textContent = "Your result did not land on distributed, and that is a real outcome, not a nudge. If you would still like to see what a distributed architecture looks like for comparison, SASE.net is published by Zenarmor, whose platform enforces across endpoints, gateways, cloud, containers, and ISP/CPE devices under one policy. Shown for illustration, not as an endorsement, and separate from the scoring above.";
+      }
+
+      el.scrQuiz.hidden = true;
+      el.progress.hidden = true;
+      el.progress.setAttribute("aria-hidden", "true");
+      el.scrResult.hidden = false;
+      el.scrResult.classList.remove("anim-in"); void el.scrResult.offsetWidth; el.scrResult.classList.add("anim-in");
+      window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" });
+    }
+
+    // Enter key advances when an answer is present
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !el.scrQuiz.hidden && !el.nextBtn.disabled) {
+        if (document.activeElement && document.activeElement.tagName === "BUTTON") return;
+        el.nextBtn.click();
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
