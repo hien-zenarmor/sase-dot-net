@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A vendor-neutral SASE requirements matrix. Check the requirements that matter to you and see how each architecture type (cloud-native, hybrid, self-hosted, distributed/sovereign) tends to fit. Runs in your browser and prints as a comparison sheet.">
+  <meta name="theme-color" content="#06121b">
+  <title>SASE Evaluation Checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+  <style>
+    /* ============================================================
+       SASE.net · SASE Requirements & Fit Matrix
+       Reuses the "SASE Explained" design language. Self-contained;
+       works without JS, prints as a comparison sheet, nothing leaves
+       the browser. Ratings show tendencies by architecture TYPE, not
+       specific products, and never compute a score.
+       ============================================================ */
+    :root {
+      --navy: #06121b; --navy-2: #0a1e2b; --panel: #0f2a39; --panel-2: #143546;
+      --cyan: #58efe3; --blue: #6e9cff; --amber: #ffad66;
+      --paper: #f4f8f7; --muted: #e3edeb; --ink: #0e2029;
+      --slate: #56707a; --slate-2: #7c949c; --white: #f7fbfa;
+      --teal: #12817d;
+      --line-dark: rgba(14, 32, 41, .14);
+      --line-dark-2: rgba(14, 32, 41, .28);
+      --line-light: rgba(247, 251, 250, .15);
+      --line-light-2: rgba(247, 251, 250, .32);
+      --display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      --body: Inter, -apple-system, "Segoe UI", Arial, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+      --radius: 3px;
+      --header-h: 62px;
+      --shell: 1520px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; color: var(--ink); background: var(--paper);
+      font-family: var(--body); font-size: 16px; line-height: 1.6;
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    img, svg { max-width: 100%; }
+    a { color: inherit; }
+    button, input, select { font: inherit; color: inherit; }
+    h1, h2, h3, h4, p, blockquote, ul { margin-top: 0; }
+    ul { padding-left: 0; list-style: none; margin: 0; }
+    table { border-collapse: collapse; }
+    ::selection { color: var(--navy); background: var(--cyan); }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+    [hidden] { display: none !important; }
+
+    /* ---------------------------------------------------- header --- */
+    .topbar {
+      position: sticky; top: 0; z-index: 100; height: var(--header-h);
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 0 clamp(18px, 3vw, 34px);
+      color: var(--white); background: rgba(6, 18, 27, .92);
+      border-bottom: 1px solid var(--line-light);
+      backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; font: 600 17px/1 var(--display); letter-spacing: .13em; }
+    .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; color: var(--navy); background: var(--cyan); font: 700 15px/1 var(--display); letter-spacing: -.04em; }
+    .topnav { display: flex; align-items: center; gap: clamp(16px, 2vw, 30px); }
+    .topnav a:not(.button) { color: #b3c9ce; text-decoration: none; font: 500 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: color .2s var(--ease); }
+    .topnav a:not(.button):hover { color: var(--cyan); }
+    .button {
+      display: inline-flex; align-items: center; gap: 12px; min-height: 40px; padding: 0 18px;
+      color: var(--navy); background: var(--cyan); border: 1px solid var(--cyan);
+      font: 500 11.5px var(--mono); letter-spacing: .07em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+      transition: background .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease), color .2s var(--ease);
+    }
+    .button:hover { background: var(--white); border-color: var(--white); transform: translateY(-1px); }
+    .button span { transition: transform .2s var(--ease); }
+    .button:hover span { transform: translateX(3px); }
+    .button-teal { color: var(--white); background: var(--teal); border-color: var(--teal); }
+    .button-teal:hover { color: var(--navy); background: var(--cyan); border-color: var(--cyan); }
+
+    /* ------------------------------------------------------- hero --- */
+    .hero { color: var(--white); background: var(--navy); border-bottom: 1px solid var(--line-light); position: relative; overflow: hidden; }
+    .hero::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(120% 90% at 88% 8%, rgba(88, 239, 227, .10), transparent 55%);
+    }
+    .hero-inner { position: relative; max-width: var(--shell); margin: 0 auto; padding: clamp(46px, 6vw, 78px) clamp(24px, 5vw, 96px) clamp(40px, 5vw, 66px); }
+    .eyebrow { margin: 0 0 22px; color: var(--cyan); font: 500 11.5px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow .dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--cyan); vertical-align: middle; }
+    .hero h1 { max-width: 20ch; margin: 0 0 22px; font: 600 clamp(40px, 6vw, 92px)/.9 var(--display); letter-spacing: -.045em; text-transform: uppercase; }
+    .hero h1 em { font-style: normal; color: var(--cyan); }
+    .hero p { max-width: 66ch; margin: 0 0 14px; color: #b6cacf; font-size: clamp(15.5px, 1.1vw, 18px); line-height: 1.7; }
+    .hero p:last-of-type { margin-bottom: 0; color: #7c979d; }
+
+    /* ---------------------------------------------------- toolbar --- */
+    .toolbar { position: sticky; top: var(--header-h); z-index: 40; background: var(--paper); border-bottom: 1px solid var(--line-dark); }
+    .toolbar-inner { max-width: 1040px; margin: 0 auto; padding: 12px clamp(20px, 5vw, 44px); display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; }
+    .cov { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .cov-count { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--slate); white-space: nowrap; }
+    .cov-count b { color: var(--ink); font-weight: 600; }
+    .cov-pips { display: inline-flex; gap: 5px; }
+    .cov-pip { width: 22px; height: 6px; background: var(--muted); }
+    .cov-pip.on { background: var(--teal); }
+    .tool-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-line { display: inline-flex; align-items: center; gap: 9px; min-height: 40px; padding: 0 16px; background: transparent; color: var(--ink); border: 1px solid var(--line-dark-2); font: 500 10.5px var(--mono); letter-spacing: .07em; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease); }
+    .btn-line:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+    /* ------------------------------------------------------- body --- */
+    .wrap { max-width: 1040px; margin: 0 auto; padding: clamp(34px, 5vw, 60px) clamp(20px, 5vw, 44px) clamp(52px, 7vw, 88px); }
+    .intro { max-width: 76ch; margin: 0 0 8px; }
+    .intro p { margin: 0 0 16px; color: #33454f; font-size: 16.5px; line-height: 1.76; }
+    .intro p:last-child { margin-bottom: 0; }
+    .intro strong { color: var(--ink); font-weight: 650; }
+    .intro a { color: var(--teal); text-decoration: none; font-weight: 600; }
+    .intro a:hover { color: var(--ink); }
+
+    .block-label { margin: clamp(38px, 4.5vw, 56px) 0 6px; font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+    .block-h { margin: 0 0 8px; font: 600 clamp(26px, 3.2vw, 40px)/.98 var(--display); letter-spacing: -.025em; text-transform: uppercase; }
+    .block-lead { max-width: 78ch; margin: 0 0 22px; color: var(--slate); font-size: 15px; line-height: 1.62; }
+
+    /* legend */
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; margin: 0 0 20px; padding: 14px 18px; background: var(--white); border: 1px solid var(--line-dark); }
+    .legend .lk { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--slate); }
+    .legend .lk b { color: var(--ink); font-weight: 600; }
+
+    /* harvey balls */
+    .hb { display: inline-block; width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid var(--teal); vertical-align: middle; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .hb-0 { background: var(--white); }
+    .hb-1 { background: linear-gradient(90deg, var(--teal) 0 50%, var(--white) 50% 100%); }
+    .hb-2 { background: var(--teal); }
+
+    /* matrix */
+    .matrix-scroll { overflow-x: auto; border: 1px solid var(--line-dark); }
+    table.matrix { width: 100%; min-width: 680px; background: var(--white); }
+    table.matrix th, table.matrix td { text-align: center; padding: 0; }
+    table.matrix thead th { position: sticky; top: 0; background: var(--ink); color: var(--white); padding: 15px 10px; font: 600 13.5px var(--display); letter-spacing: .05em; text-transform: uppercase; vertical-align: bottom; line-height: 1.12; }
+    table.matrix thead th small { display: block; margin-top: 5px; font: 400 10px var(--mono); letter-spacing: .02em; text-transform: none; color: #9fb7bd; }
+    table.matrix thead th.req-col { text-align: left; font: 600 17px var(--display); letter-spacing: .08em; }
+    .col-w { width: 106px; }
+    tbody.msec .sec-row th { text-align: left; background: var(--muted); color: var(--ink); padding: 11px 14px; font: 600 15px var(--display); letter-spacing: .02em; text-transform: uppercase; border-top: 1px solid var(--line-dark); }
+    tbody.msec .sec-row .sn { color: var(--teal); font: 500 11px var(--mono); margin-right: 10px; }
+    tbody.msec .sec-row .sec-tag { float: right; margin-top: 2px; padding: 2px 8px; background: var(--teal); color: var(--white); font: 500 9px var(--mono); letter-spacing: .06em; }
+    tr.req td { border-top: 1px solid var(--line-dark); vertical-align: middle; }
+    table.matrix td.req-col, table.matrix td.req-col .txt { text-align: left; }
+    td.req-col label { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; cursor: pointer; }
+    td.req-col input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    td.req-col .box { flex: none; width: 20px; height: 20px; margin-top: 1px; border: 1.5px solid var(--line-dark-2); background: var(--white); display: grid; place-items: center; transition: background .15s var(--ease), border-color .15s var(--ease); }
+    td.req-col .box::after { content: "✓"; color: var(--white); font-size: 13px; line-height: 1; opacity: 0; }
+    td.req-col label:hover .box { border-color: var(--teal); }
+    td.req-col input:focus-visible + .box { outline: 2px solid var(--amber); outline-offset: 2px; }
+    td.req-col input:checked + .box { background: var(--teal); border-color: var(--teal); }
+    td.req-col input:checked + .box::after { opacity: 1; }
+    td.req-col .txt { font-size: 14.5px; line-height: 1.45; color: #293b44; }
+    td.req-col .txt b { color: var(--ink); font-weight: 650; }
+    tr.req.on td { background: rgba(18, 129, 125, .07); }
+    tr.req.on td.req-col .txt { color: var(--ink); }
+    td.c { width: 106px; }
+    sup.fn, .matrix-fn .fn { color: var(--teal); font-weight: 700; }
+    .matrix-fn { margin: 14px 0 0; color: var(--slate); font-size: 12.5px; line-height: 1.5; }
+
+    /* baseline capabilities */
+    .baseline { margin-top: 10px; padding: 22px clamp(18px, 2.5vw, 28px); background: var(--white); border: 1px solid var(--line-dark); border-top: 2px solid var(--ink); }
+    .baseline .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .baseline .chip { padding: 6px 12px; background: var(--muted); font: 600 12.5px var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
+    .baseline .chip small { color: var(--slate); font: 400 10px var(--mono); letter-spacing: 0; text-transform: none; margin-left: 6px; }
+
+    /* vendor questions */
+    .vq { margin-top: 6px; }
+    .vq li { border-bottom: 1px solid var(--line-dark); }
+    .vq label { display: flex; align-items: flex-start; gap: 13px; padding: 12px 4px; cursor: pointer; }
+    .vq input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .vq .box { flex: none; width: 20px; height: 20px; margin-top: 1px; border: 1.5px solid var(--line-dark-2); background: var(--white); display: grid; place-items: center; }
+    .vq .box::after { content: "✓"; color: var(--white); font-size: 13px; line-height: 1; opacity: 0; }
+    .vq label:hover .box { border-color: var(--teal); }
+    .vq input:focus-visible + .box { outline: 2px solid var(--amber); outline-offset: 2px; }
+    .vq input:checked + .box { background: var(--teal); border-color: var(--teal); }
+    .vq input:checked + .box::after { opacity: 1; }
+    .vq .txt { font-size: 15px; line-height: 1.5; color: #293b44; }
+    .vq .txt b { color: var(--ink); font-weight: 650; }
+    .vq input:checked ~ .txt { color: var(--slate-2); }
+
+    /* closing / disclosure */
+    .closing { margin-top: clamp(40px, 5vw, 60px); padding: 26px clamp(20px, 3vw, 32px); background: var(--muted); border-left: 3px solid var(--teal); }
+    .closing h3 { margin: 0 0 10px; font: 600 clamp(20px, 2vw, 26px)/1 var(--display); text-transform: uppercase; letter-spacing: -.01em; }
+    .closing p { margin: 0 0 12px; max-width: 80ch; color: var(--slate); font-size: 14.5px; line-height: 1.7; }
+    .closing p:last-child { margin-bottom: 0; }
+    .closing a { color: var(--teal); text-decoration: none; font-weight: 600; }
+    .closing a:hover { color: var(--ink); }
+    .foot-actions { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; margin-top: 30px; }
+
+    /* footer */
+    .site-footer { color: var(--white); background: var(--navy); border-top: 1px solid var(--line-light); }
+    .footer-inner { max-width: var(--shell); margin: 0 auto; padding: clamp(40px, 5vw, 64px) clamp(24px, 5vw, 84px) 30px; }
+    .footer-inner .note { max-width: 68ch; margin: 0 0 26px; color: #93aeb4; font-size: 14px; line-height: 1.7; }
+    .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 22px; border-top: 1px solid var(--line-light); color: var(--slate-2); font: 400 11.5px var(--mono); letter-spacing: .06em; }
+    .footer-base a { color: #b3c9ce; text-decoration: none; }
+    .footer-base a:hover { color: var(--cyan); }
+
+    /* ------------------------------------------------ responsive --- */
+    @media (max-width: 640px) { .topnav .hide-sm { display: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+
+    /* ---------------------------------------------------- print --- */
+    @media print {
+      .topbar, .toolbar, .hero::after, .foot-actions, .site-footer { display: none !important; }
+      .hero { background: none; color: #000; border: 0; }
+      .hero-inner { padding: 0 0 10px; }
+      .hero h1 { font-size: 26px; color: #000; } .hero h1 em { color: #000; }
+      .hero p { color: #333; font-size: 11px; } .hero .eyebrow { color: #000; }
+      body { background: #fff; font-size: 11px; }
+      .wrap { padding: 6px 0; max-width: none; }
+      .block-h { color: #000; font-size: 17px; }
+      .matrix-scroll { overflow: visible; border-color: #000; }
+      table.matrix { min-width: 0; }
+      table.matrix thead th { background: #000 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      tbody.msec .sec-row th { background: #eee !important; color: #000; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      tbody.msec, tr.req, .baseline, .vq li { break-inside: avoid; }
+      .hb { border-color: #000; }
+      .hb-1 { background: linear-gradient(90deg, #000 0 50%, #fff 50% 100%); }
+      .hb-2 { background: #000; }
+      tr.req.on td { background: #e9e9e9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .baseline .chip { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================ HEADER -->
+  <header class="topbar">
+    <a class="brand" href="sase-explained.html"><span class="brand-mark">S/</span>SASE.NET</a>
+    <nav class="topnav" aria-label="Primary">
+      <a class="hide-sm" href="assessment.html">The assessment</a>
+      <a class="button button-teal" href="sase-explained.html">The SASE guide <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <!-- ============================================================ HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Buyer's tool</p>
+      <h1>SASE evaluation <em>checklist.</em></h1>
+      <p>Check the requirements that matter to you. The matrix shows how each architecture type tends to meet them, so you can see which approach fits your needs before you talk to a single vendor. It assumes you want a complete SASE platform, so the standard features are listed as a baseline rather than scored.</p>
+      <p>Everything stays in your browser, and the page prints as a comparison sheet you can take into demos and vendor calls.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <div class="cov">
+        <span class="cov-count"><b id="selNow">0</b> requirements selected</span>
+        <span class="cov-pips" id="covPips" aria-hidden="true"></span>
+        <span class="cov-count"><b id="areasNow">0</b> of <span id="areasTotal">6</span> areas addressed</span>
+      </div>
+      <div class="tool-actions">
+        <button class="btn-line" id="printBtn" type="button">Print / Save PDF</button>
+        <button class="btn-line" id="resetBtn" type="button">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ BODY -->
+  <main class="wrap">
+
+    <div class="intro">
+      <p>Feature sheets look almost identical. The differences show up under load, across distance, during an outage, and in the fine print of where your data is handled. Tick the requirements that apply to you, then read down the columns to see which architecture types tend to fit.</p>
+      <p>The circles show tendencies by architecture <strong>type</strong>, not specific products, and the page never picks a winner for you. If you want a personalized read on which approach fits, pair this with the <a href="assessment.html">architecture assessment</a>.</p>
+    </div>
+
+    <!-- ===================== THE MATRIX ===================== -->
+    <p class="block-label">The requirements matrix</p>
+    <h2 class="block-h">Your requirements &amp; how each type fits</h2>
+    <p class="block-lead">Check the rows that matter to you. Columns are architecture types, not vendors. A type earns a full circle where it meets a requirement by design, a half circle where it is possible with trade-offs or add-ons, and an empty circle where it is a weak fit.</p>
+
+    <div class="legend">
+      <span class="lk"><span class="hb hb-2"></span> <b>Strong fit</b></span>
+      <span class="lk"><span class="hb hb-1"></span> <b>Partial</b>, often with trade-offs</span>
+      <span class="lk"><span class="hb hb-0"></span> <b>Limited</b></span>
+    </div>
+
+    <div class="matrix-scroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="req-col">Requirement</th>
+            <th class="col-w">Cloud-<br>native<small>vendor cloud PoPs</small></th>
+            <th class="col-w">Hybrid<small>cloud + appliances</small></th>
+            <th class="col-w">Self-<br>hosted<small>your gear, central</small></th>
+            <th class="col-w">Distributed<br>Sovereign<small>everywhere, yours</small></th>
+          </tr>
+        </thead>
+
+        <!-- 01 COVERAGE -->
+        <tbody class="msec" data-sec="Coverage">
+          <tr class="sec-row"><th colspan="5"><span class="sn">01</span>What you need to protect</th></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Remote &amp; roaming <b>users</b></span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Branch offices</b> and physical sites</span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Cloud workloads</b> and VPCs</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Containers</b> and Kubernetes</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Servers, legacy &amp; OT</b> that can't run an agent</span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>IoT and agentless</b> devices</span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Private access to <b>internal apps</b></span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+        </tbody>
+
+        <!-- 02 ENFORCEMENT LOCATIONS -->
+        <tbody class="msec" data-sec="Enforcement">
+          <tr class="sec-row"><th colspan="5"><span class="sn">02</span>Where enforcement can run</th></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">In a <b>vendor cloud PoP</b></span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>On the endpoint</b></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">On a <b>branch gateway, firewall, or server</b></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Inside your own cloud, VPC, or container</b></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">On <b>ISP or CPE devices</b></span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>One policy and console</b> across every location</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">On <b>gateways and infrastructure you already run</b></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+        </tbody>
+
+        <!-- 03 SOVEREIGNTY -->
+        <tbody class="msec" data-sec="Sovereignty">
+          <tr class="sec-row"><th colspan="5"><span class="sn">03</span>Data sovereignty &amp; control <span class="sec-tag">Where types differ</span></th></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Control over <b>where traffic is decrypted</b>, and who operates it</span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Traffic, logs &amp; keys kept in <b>specific jurisdictions</b></span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Inspection <b>entirely on infrastructure you control</b></span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Inspection <b>without giving the vendor access</b> to your data</span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Compliance with <b>residency or regulatory rules</b></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">The ability to <b>hold your own decryption keys</b></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+        </tbody>
+
+        <!-- 04 PERFORMANCE -->
+        <tbody class="msec" data-sec="Performance">
+          <tr class="sec-row"><th colspan="5"><span class="sn">04</span>Performance &amp; traffic path <span class="sec-tag">Where types differ</span></th></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Local inspection, on-device</b></span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Inline inspection <b>close to the user, site, or workload</b></span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Low, predictable latency</b> for sensitive traffic</span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Cloud-based inspection</b> for sites without capable devices</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td></tr>
+        </tbody>
+
+        <!-- 05 RESILIENCE -->
+        <tbody class="msec" data-sec="Resilience">
+          <tr class="sec-row"><th colspan="5"><span class="sn">05</span>Resilience &amp; availability <span class="sec-tag">Where types differ</span></th></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Enforcement that <b>survives a vendor-cloud outage</b><sup class="fn">*</sup></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Each <b>enforcement point (PEP) holds its own policy</b>, with no cloud dependency</span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>No single central chokepoint</b></span></label></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Failover that <b>does not lengthen the traffic path</b></span></label></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td></tr>
+        </tbody>
+
+        <!-- 06 OPERATIONS & DELIVERY -->
+        <tbody class="msec" data-sec="Operations">
+          <tr class="sec-row"><th colspan="5"><span class="sn">06</span>Operations &amp; delivery <span class="sec-tag">Where types differ</span></th></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Turnkey, fast deployment</b> with minimal setup</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Security infrastructure completely run by the vendor</b> or solution provider</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Broad <b>global reach</b> through an established PoP network</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>No infrastructure to manage and maintain</b></span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Runs with <b>minimal in-house networking and security expertise</b></span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td><td class="c"><span class="hb hb-0" title="Limited"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">A <b>predictable subscription</b> with hands-off operation</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">One <b>vendor accountable for the whole path</b></span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td></tr>
+          <tr class="req"><td class="req-col"><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Comfortable <b>routing traffic through a vendor cloud</b> for simplicity</span></label></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-2" title="Strong fit"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td><td class="c"><span class="hb hb-1" title="Partial"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="matrix-fn"><span class="fn">*</span> Cloud-native can approach this only with an additional on-prem device or license.</p>
+    <p class="block-lead" style="margin-top:16px">The distributed and self-hosted columns show more full circles across these rows, because most of them are about control, locality, and resilience, which those architectures are built for. Cloud-native trades some of that for the simplicity, scale, and low operational effort in the Operations and delivery rows. More circles is not better. Weigh only the rows you actually checked.</p>
+
+    <!-- ===================== BASELINE ===================== -->
+    <p class="block-label">Assumed baseline</p>
+    <h2 class="block-h">What a full SASE platform should include</h2>
+    <p class="block-lead">This checklist assumes you want a complete SASE platform, so these are treated as table stakes rather than differentiators. Every serious option should include them. Confirm each is present and works at every enforcement point you plan to use.</p>
+    <div class="baseline">
+      <div class="chips">
+        <span class="chip">ZTNA <small>never trust, always verify</small></span>
+        <span class="chip">SWG <small>secure web gateway</small></span>
+        <span class="chip">CASB <small>cloud app control</small></span>
+        <span class="chip">FWaaS <small>firewall + IPS/IDS</small></span>
+        <span class="chip">SD-WAN <small>intelligent path selection</small></span>
+        <span class="chip">DLP <small>data loss prevention</small></span>
+        <span class="chip">TLS inspection <small>with reviewable exclusions</small></span>
+        <span class="chip">App control <small>allow / block</small></span>
+        <span class="chip">Identity &amp; posture <small>SSO, MFA, device checks</small></span>
+      </div>
+    </div>
+
+    <!-- ===================== VENDOR QUESTIONS ===================== -->
+    <p class="block-label">Ask each vendor</p>
+    <h2 class="block-h">Questions that depend on the vendor</h2>
+    <p class="block-lead">These are not settled by architecture type, so they are not in the matrix. They depend on the specific product and company. Tick the ones to raise with each vendor you shortlist.</p>
+    <ul class="vq">
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Single-pass inspection</b>: is traffic decoded once, or chained through several products?</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Which parts were <b>built in-house versus acquired or resold</b>?</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Are the <b>same capabilities available at every enforcement point</b>, or do some points have less robust protection?</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">One <b>console with consistent logs</b>, or several?</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">A <b>single management plane</b> across every enforcement point</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Multi-tenant management</b>, if you run separate units or deliver as an MSP / ISP</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Role-based access control</b> and audit logging</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">Centralized <b>visibility, reporting, and SIEM export</b></span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">A fit with <b>who will operate it</b> (internal team, MSP, MSSP, or ISP)</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Transparent, predictable licensing</b>, watching for bandwidth or traffic charges from mandatory PoP transit</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">A <b>phased migration</b> that reuses existing gear, not a required rip-and-replace</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt">The <b>parallel-run cost</b>, the 60 to 90 days of paying for old and new while policy moves</span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Contract terms and any lock-in</b></span></label></li>
+      <li><label><input type="checkbox"><span class="box" aria-hidden="true"></span><span class="txt"><b>Support quality and SLAs</b>, including who you reach when something breaks</span></label></li>
+    </ul>
+
+    <!-- CLOSING / DISCLOSURE -->
+    <div class="closing">
+      <h3>How to read this</h3>
+      <p>No architecture type is the right answer on its own, and most environments end up as a blend. Look at the circles across the rows you checked: a type with mostly full circles there is worth a closer look, and a type with empty circles on requirements you care about is worth questioning hard. Give extra weight to sovereignty, performance, and resilience, since those are the hardest to change later.</p>
+      <p>SASE.net is an educational resource published by Zenarmor, a provider of distributed SASE, SSE, ZTNA, and network security. This matrix is written to be vendor-neutral. If your requirements point toward the distributed and sovereign column, <a href="https://www.zenarmor.com/innovation" target="_blank" rel="noopener">see how Zenarmor implements distributed SASE</a>.</p>
+    </div>
+
+    <div class="foot-actions">
+      <button class="btn-line" id="printBtn2" type="button">Print / Save PDF</button>
+      <a class="btn-line" href="assessment.html">Take the architecture assessment →</a>
+      <a class="btn-line" href="sase-explained.html">Back to the SASE guide</a>
+    </div>
+
+  </main>
+
+  <!-- ============================================================ FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="note">A vendor-neutral requirements matrix for evaluating SASE solutions. It shows tendencies by architecture type, not specific products, and it is a decision aid, not advice. Published by Zenarmor.</p>
+      <div class="footer-base">
+        <span>© <span data-year>2026</span> SASE.net · Runs entirely in your browser</span>
+        <a href="sase-explained.html">The SASE guide ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+    var KEY = 'sasenet-checklist-v2';
+    var msecs = Array.prototype.slice.call(document.querySelectorAll('tbody.msec'));
+    var matrixBoxes = Array.prototype.slice.call(document.querySelectorAll('tbody.msec .req-col input[type="checkbox"]'));
+    var vqBoxes = Array.prototype.slice.call(document.querySelectorAll('.vq input[type="checkbox"]'));
+    var allBoxes = matrixBoxes.concat(vqBoxes);
+    allBoxes.forEach(function (b, i) { b.dataset.i = i; });
+
+    // build per-section coverage pips
+    var pipWrap = document.getElementById('covPips');
+    msecs.forEach(function () { var s = document.createElement('span'); s.className = 'cov-pip'; pipWrap.appendChild(s); });
+    document.getElementById('areasTotal').textContent = msecs.length;
+
+    function save() {
+      try {
+        var on = allBoxes.filter(function (b) { return b.checked; }).map(function (b) { return b.dataset.i; });
+        localStorage.setItem(KEY, JSON.stringify(on));
+      } catch (e) { /* ignore */ }
+    }
+    function load() {
+      try {
+        var raw = localStorage.getItem(KEY); if (!raw) return;
+        var on = JSON.parse(raw); if (!Array.isArray(on)) return;
+        on.forEach(function (i) { if (allBoxes[i]) allBoxes[i].checked = true; });
+      } catch (e) { /* ignore */ }
+    }
+    function rowClass() {
+      matrixBoxes.forEach(function (b) {
+        var tr = b.closest('tr.req'); if (tr) tr.classList.toggle('on', b.checked);
+      });
+    }
+    function update() {
+      rowClass();
+      var sel = matrixBoxes.filter(function (b) { return b.checked; }).length;
+      document.getElementById('selNow').textContent = sel;
+      var areas = 0;
+      msecs.forEach(function (sec, i) {
+        var any = !!sec.querySelector('.req-col input:checked');
+        pipWrap.children[i].classList.toggle('on', any);
+        if (any) areas++;
+      });
+      document.getElementById('areasNow').textContent = areas;
+    }
+
+    load();
+    update();
+    allBoxes.forEach(function (b) { b.addEventListener('change', function () { save(); update(); }); });
+
+    document.querySelectorAll('#printBtn, #printBtn2').forEach(function (btn) {
+      btn.addEventListener('click', function () { window.print(); });
+    });
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      allBoxes.forEach(function (b) { b.checked = false; });
+      save(); update();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
+  </script>
+</body>
+</html>
