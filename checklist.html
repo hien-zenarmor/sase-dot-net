@@ -47,6 +47,8 @@
     a { color: inherit; }
     button, input, select { font: inherit; color: inherit; }
     h1, h2, h3, h4, p, blockquote, ul { margin-top: 0; }
+    /* even out heading line lengths so no single word is orphaned on the last line */
+    h1, h2, h3, h4 { text-wrap: balance; }
     ul { padding-left: 0; list-style: none; margin: 0; }
     table { border-collapse: collapse; }
     ::selection { color: var(--navy); background: var(--cyan); }
@@ -92,7 +94,7 @@
     .hero h1 { max-width: 20ch; margin: 0 0 22px; font: 600 clamp(40px, 6vw, 92px)/.9 var(--display); letter-spacing: -.045em; text-transform: uppercase; }
     .hero h1 em { font-style: normal; color: var(--cyan); }
     /* spelled-out keyword / query inside the h1 — full heading weight, plain-language */
-    .hero h1 .h1-sub { display: block; margin-top: 18px; color: #b6cacf; font: 500 clamp(18px, 2vw, 26px)/1.25 var(--body); letter-spacing: -.01em; text-transform: none; }
+    .hero h1 .h1-sub { display: block; margin-top: 18px; color: #e3edeb; font: 500 clamp(18px, 2vw, 26px)/1.25 var(--body); letter-spacing: -.01em; text-transform: none; }
     .hero p { max-width: 66ch; margin: 0 0 14px; color: #b6cacf; font-size: clamp(15.5px, 1.1vw, 18px); line-height: 1.7; }
     .hero p:last-of-type { margin-bottom: 0; color: #7c979d; }
 
