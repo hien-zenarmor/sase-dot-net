@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A plain-language guide to Secure Access Service Edge (SASE): what it combines, where enforcement can run, how centralized and distributed architectures compare, and how to choose.">
   <meta name="theme-color" content="#06121b">
-  <title>SASE, Explained</title>
+  <title>What Is SASE? Secure Access Service Edge Explained | SASE.net</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
@@ -94,6 +94,8 @@
     .eyebrow .dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--cyan); vertical-align: middle; }
     .hero h1 { max-width: 16ch; margin: 0 0 26px; font: 600 clamp(50px, 8vw, 122px)/.86 var(--display); letter-spacing: -.045em; text-transform: uppercase; }
     .hero h1 em { font-style: normal; color: var(--cyan); }
+    /* spelled-out keyword inside the h1 — full heading weight, plain-language */
+    .hero h1 .h1-sub { display: block; margin-top: 18px; color: #b6cacf; font: 500 clamp(18px, 2vw, 26px)/1.25 var(--body); letter-spacing: -.01em; text-transform: none; }
     .hero p { max-width: 60ch; margin: 0 0 14px; color: #b6cacf; font-size: clamp(16px, 1.15vw, 19px); line-height: 1.72; }
     .hero p:last-of-type { margin-bottom: 0; color: #7c979d; }
 
@@ -130,11 +132,34 @@
 
     /* main column */
     .doc-main { min-width: 0; background: var(--paper); }
+
+    /* horizontal in-content TOC — identical on desktop and mobile, so the
+       navigation Google crawls (mobile-first) matches the desktop version */
+    .toc-strip {
+      position: sticky; top: var(--header-h); z-index: 90;
+      display: flex; gap: 6px; overflow-x: auto;
+      padding: 11px clamp(24px, 5vw, 84px);
+      background: rgba(6, 18, 27, .96); border-bottom: 1px solid var(--line-light);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      scrollbar-width: none;
+    }
+    .toc-strip::-webkit-scrollbar { display: none; }
+    .toc-strip a {
+      flex: none; padding: 7px 14px; color: #b3c9ce; text-decoration: none;
+      font: 500 11.5px var(--mono); letter-spacing: .07em; text-transform: uppercase; white-space: nowrap;
+      border: 1px solid var(--line-light); transition: color .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease);
+    }
+    .toc-strip a:hover { color: var(--white); border-color: var(--line-light-2); }
+    .toc-strip a.active { color: var(--navy); background: var(--cyan); border-color: var(--cyan); }
     .sec { padding: clamp(52px, 6vw, 92px) clamp(24px, 5vw, 84px); border-bottom: 1px solid var(--line-dark); }
     .sec:nth-child(even) { background: var(--muted); }
     .kicker { margin: 0 0 20px; color: var(--teal); font: 500 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
-    .sec h2 { max-width: 20ch; margin: 0 0 22px; font: 600 clamp(34px, 4.2vw, 66px)/.9 var(--display); letter-spacing: -.035em; text-transform: uppercase; }
+    .sec h2 { max-width: 20ch; margin: 0 0 14px; font: 600 clamp(34px, 4.2vw, 66px)/.9 var(--display); letter-spacing: -.035em; text-transform: uppercase; }
     .sec h2 em { font-style: normal; color: var(--teal); }
+    /* query-shaped subtitle under the display heading — carries the search
+       intent in plain language while the h2 keeps the editorial voice */
+    /* query as a styled tagline INSIDE the h2 — full heading weight, one outline node */
+    .sec h2 .h2-q { display: block; margin-top: 14px; color: var(--slate); font: 500 clamp(17px, 1.5vw, 22px)/1.35 var(--body); letter-spacing: -.01em; text-transform: none; }
     .prose { max-width: 72ch; }
     .prose p { margin: 0 0 18px; color: #33454f; font-size: 16.5px; line-height: 1.76; }
     .prose p:last-child { margin-bottom: 0; }
@@ -363,7 +388,7 @@
   <section class="hero" id="top">
     <div class="hero-inner">
       <p class="eyebrow"><span class="dot" aria-hidden="true"></span> A field guide</p>
-      <h1>SASE, without the <em>acronym soup.</em></h1>
+      <h1>SASE, without the <em>acronym soup.</em><span class="h1-sub">Secure Access Service Edge, explained in plain language.</span></h1>
       <p>Secure Access Service Edge is a way of running networking and security as one service instead of as a rack of separate boxes. This guide explains what it actually combines, why it showed up when it did, and the architectural choices that separate SASE platforms from one another.</p>
       <p>No product pitch. Where a name helps make a point, we use it.</p>
     </div>
@@ -425,6 +450,19 @@
     <!-- ---------- MAIN CONTENT ---------- -->
     <main class="doc-main" id="main">
 
+      <!-- HORIZONTAL TOC — same links on every viewport (desktop/mobile parity) -->
+      <nav class="toc-strip" aria-label="On this page">
+        <a href="#what">What SASE fixes</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#parts">Components</a>
+        <a href="#distributed">Distributed SASE</a>
+        <a href="#adopt">Adoption</a>
+        <a href="#practice">In practice</a>
+        <a href="#choose">How to choose</a>
+        <a href="#further">Further reading</a>
+        <a href="#glossary">Glossary</a>
+      </nav>
+
       <!-- LATEST BRIEFS (static strip — not a carousel) -->
       <section class="briefs" aria-label="Latest briefs">
         <div class="briefs-head">
@@ -442,7 +480,7 @@
       <!-- THE IDEA -->
       <section class="sec" id="what">
         <p class="kicker">The idea</p>
-        <h2>What SASE is <em>trying to fix.</em></h2>
+        <h2>What SASE is <em>trying to fix.</em><span class="h2-q">What problem does SASE solve?</span></h2>
         <p class="lede">Analyst firm Gartner coined the term SASE in 2019. The word describes a pattern more than a product, so two vendors can both say "SASE" and mean quite different things under the hood.</p>
         <div class="prose">
           <p>For decades the model was simple: staff sat in an office, applications lived in a data center down the hall, and a firewall guarded the one door between the office and the internet. Security was mostly a matter of controlling that door.</p>
@@ -461,7 +499,7 @@
       <!-- THE ARCHITECTURE -->
       <section class="sec" id="architecture">
         <p class="kicker">The architecture</p>
-        <h2>The two halves of <em>every SASE.</em></h2>
+        <h2>The two halves of <em>every SASE.</em><span class="h2-q">How does SASE architecture work?</span></h2>
         <p class="lede">Before comparing vendors, it helps to see how a SASE platform is built. Underneath the acronyms, every SASE has two parts: a management plane and an enforcement plane.</p>
         <div class="planes">
           <div class="plane">
@@ -496,7 +534,7 @@
       <!-- COMPONENTS -->
       <section class="sec" id="parts">
         <p class="kicker">The components</p>
-        <h2>What is actually <em>inside.</em></h2>
+        <h2>What is actually <em>inside.</em><span class="h2-q">What are the core components of SASE?</span></h2>
         <p class="lede">SASE is a bundle. The security half is often called SSE (Security Service Edge); add the networking half and you have SASE. These are the pieces most vendors agree belong in the box.</p>
         <div class="cards">
           <article class="card"><span class="abbr">ZTNA</span><h3>Zero Trust Network Access</h3><p>Connects a verified user to one specific application, not the whole network. Access is re-checked continuously, so a session that turns risky can be cut off while it is still running.</p></article>
@@ -515,7 +553,7 @@
       <!-- A DISTRIBUTED, FLEXIBLE ARCHITECTURE -->
       <section class="sec" id="distributed">
         <p class="kicker">A different approach</p>
-        <h2>A distributed, <em>flexible architecture.</em></h2>
+        <h2>A distributed, <em>flexible architecture.</em><span class="h2-q">What is distributed SASE?</span></h2>
         <p class="lede">Enforcement does not have to live in the vendor's cloud. In a distributed architecture the management plane stays cloud-based, but enforcement moves out to wherever your traffic actually is.</p>
         <div class="prose">
           <p>Instead of routing every connection to a vendor PoP, a distributed platform runs its enforcement engine on infrastructure that is already close to the traffic: endpoints, branch gateways, firewalls, cloud VMs, containers, and compatible ISP or CPE devices. Policy and visibility are still authored and aggregated centrally, in one cloud console, so you manage everything in one place. Only the inspection moves.</p>
@@ -683,7 +721,7 @@
       <!-- ADOPTING SASE -->
       <section class="sec" id="adopt">
         <p class="kicker">Adoption</p>
-        <h2>Adopt SASE without a <em>full rip-and-replace.</em></h2>
+        <h2>Adopt SASE without a <em>full rip-and-replace.</em><span class="h2-q">How do you deploy and adopt SASE?</span></h2>
         <p class="lede">Moving to SASE does not have to begin with a network-wide migration. A distributed architecture lets you introduce protection where it is needed first and expand over time.</p>
         <div class="prose">
           <p>Traditional cloud-PoP rollouts often ask you to redirect traffic, stand up tunnels and connectors, migrate policy to the vendor's cloud, and sometimes replace existing security gear. That creates a long transition where the old and new environments must run in parallel. Enforcement added to infrastructure you already own can start smaller and grow.</p>
@@ -705,7 +743,7 @@
       <!-- SASE IN PRACTICE -->
       <section class="sec" id="practice">
         <p class="kicker">In practice</p>
-        <h2>Distributed SASE <em>in practice.</em></h2>
+        <h2>Distributed SASE <em>in practice.</em><span class="h2-q">What does distributed SASE look like in practice?</span></h2>
         <p class="lede">To make the distributed model concrete, here is one platform built that way. It is an illustrative example, not an endorsement.</p>
         <div class="prose">
           <p>Zenarmor is an example of a distributed SASE architecture. Its enforcement engine can run on endpoints, network gateways, cloud environments, containers, compatible ISP and CPE devices, and other customer- or partner-selected edges, while policy and visibility are managed centrally through its Zenconsole management plane. That lets an organization place enforcement where it best supports performance, protection, control, and operational needs.</p>
@@ -720,7 +758,7 @@
       <!-- CHOOSING -->
       <section class="sec" id="choose">
         <p class="kicker">Before you sign</p>
-        <h2>Questions that separate <em>vendors fast.</em></h2>
+        <h2>Questions that separate <em>vendors fast.</em><span class="h2-q">How do you evaluate and choose a SASE vendor?</span></h2>
         <p class="lede">Feature sheets look identical. Differences show up under load, across distance, and during failure. A few questions cut through the marketing quickly.</p>
         <div class="faq">
           <details class="q" open><summary><span class="qt">At which locations can enforcement run, and can it use our existing gear?</span><span class="mark" aria-hidden="true"></span></summary><div class="qa"><p>The core question. Can inspection run in a vendor PoP, on the endpoint, at a gateway, on a compatible ISP/CPE device, or inside our own cloud and containers? And can it reuse gateways and infrastructure we already operate, or does everything have to move onto the vendor's network?</p></div></details>
@@ -742,7 +780,7 @@
       <!-- FURTHER READING -->
       <section class="sec" id="further">
         <p class="kicker">Neutral references</p>
-        <h2>Further <em>reading.</em></h2>
+        <h2>Further <em>reading.</em><span class="h2-q">Where can you learn more about SASE?</span></h2>
         <p class="lede">Independent, vendor-neutral resources for going deeper. These are third-party sources, grouped by what they are best for.</p>
         <div class="refs">
           <a class="ref" href="https://www.techtarget.com/it-infrastructure/feature/The-complete-secure-access-service-edge-SASE-guide" target="_blank" rel="noopener"><span class="role">Definitional guide</span><b>TechTarget: Complete SASE Guide</b><span class="d">Definition, architecture, components, benefits, challenges, and SASE vs. SSE / SD-WAN / Zero Trust.</span><span class="ext">Read ↗</span></a>
@@ -760,19 +798,24 @@
       <!-- GLOSSARY -->
       <section class="sec" id="glossary">
         <p class="kicker">Reference</p>
-        <h2>The acronyms, <em>decoded.</em></h2>
+        <h2>The acronyms, <em>decoded.</em><span class="h2-q">What do the SASE acronyms mean?</span></h2>
         <p class="lede">Keep this handy on your next vendor call.</p>
-        <div class="terms">
-          <div><b>SASE</b><span>Secure Access Service Edge. Networking and security converged into one edge-delivered service. Say "sassy."</span></div>
-          <div><b>SSE</b><span>Security Service Edge. The security half of SASE (SWG, CASB, ZTNA, DLP) without the networking (SD-WAN).</span></div>
-          <div><b>ZTNA</b><span>Zero Trust Network Access. Verified access to one app at a time, re-checked continuously. Replaces the always-on VPN.</span></div>
-          <div><b>SWG</b><span>Secure Web Gateway. Filters and inspects outbound web traffic for threats and policy.</span></div>
-          <div><b>CASB</b><span>Cloud Access Security Broker. Visibility and control over the cloud and SaaS apps in use.</span></div>
-          <div><b>FWaaS</b><span>Firewall as a Service. Cloud- or edge-delivered firewalling and intrusion prevention.</span></div>
-          <div><b>SD-WAN</b><span>Software-Defined WAN. Intelligent path selection across links; the networking layer of SASE.</span></div>
-          <div><b>DLP</b><span>Data Loss Prevention. Stops sensitive data from leaving where it should not go.</span></div>
-          <div><b>PoP</b><span>Point of Presence. A vendor-operated location where cloud-delivered SASE inspects your traffic.</span></div>
-          <div><b>Backhaul</b><span>Routing traffic back to a central point before sending it on. The delay SASE aims to remove.</span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Acronym</th><th>What it means</th></tr></thead>
+            <tbody>
+              <tr><th>SASE</th><td data-label="What it means">Secure Access Service Edge. Networking and security converged into one edge-delivered service. Say "sassy."</td></tr>
+              <tr><th>SSE</th><td data-label="What it means">Security Service Edge. The security half of SASE (SWG, CASB, ZTNA, DLP) without the networking (SD-WAN).</td></tr>
+              <tr><th>ZTNA</th><td data-label="What it means">Zero Trust Network Access. Verified access to one app at a time, re-checked continuously. Replaces the always-on VPN.</td></tr>
+              <tr><th>SWG</th><td data-label="What it means">Secure Web Gateway. Filters and inspects outbound web traffic for threats and policy.</td></tr>
+              <tr><th>CASB</th><td data-label="What it means">Cloud Access Security Broker. Visibility and control over the cloud and SaaS apps in use.</td></tr>
+              <tr><th>FWaaS</th><td data-label="What it means">Firewall as a Service. Cloud- or edge-delivered firewalling and intrusion prevention.</td></tr>
+              <tr><th>SD-WAN</th><td data-label="What it means">Software-Defined WAN. Intelligent path selection across links; the networking layer of SASE.</td></tr>
+              <tr><th>DLP</th><td data-label="What it means">Data Loss Prevention. Stops sensitive data from leaving where it should not go.</td></tr>
+              <tr><th>PoP</th><td data-label="What it means">Point of Presence. A vendor-operated location where cloud-delivered SASE inspects your traffic.</td></tr>
+              <tr><th>Backhaul</th><td data-label="What it means">Routing traffic back to a central point before sending it on. The delay SASE aims to remove.</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -845,14 +888,14 @@
     });
 
     // scrollspy — highlight the active section in the left nav
-    var links = Array.prototype.slice.call(document.querySelectorAll('.doc-nav .toc a'));
+    var links = Array.prototype.slice.call(document.querySelectorAll('.doc-nav .toc a, .toc-strip a'));
     var byId = {};
-    links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    links.forEach(function (a) { var id = a.getAttribute('href').slice(1); (byId[id] = byId[id] || []).push(a); });
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting) {
           links.forEach(function (l) { l.classList.remove('active'); });
-          if (byId[en.target.id]) byId[en.target.id].classList.add('active');
+          (byId[en.target.id] || []).forEach(function (l) { l.classList.add('active'); });
         }
       });
     }, { rootMargin: '-45% 0px -50% 0px' });

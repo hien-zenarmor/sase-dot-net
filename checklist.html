@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A vendor-neutral SASE requirements matrix. Check the requirements that matter to you and see how each architecture type (cloud-native, hybrid, self-hosted, distributed/sovereign) tends to fit. Runs in your browser and prints as a comparison sheet.">
   <meta name="theme-color" content="#06121b">
-  <title>SASE Evaluation Checklist</title>
+  <title>SASE Vendor Evaluation Checklist: Compare SASE Architectures | SASE.net</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
@@ -91,6 +91,8 @@
     .eyebrow .dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--cyan); vertical-align: middle; }
     .hero h1 { max-width: 20ch; margin: 0 0 22px; font: 600 clamp(40px, 6vw, 92px)/.9 var(--display); letter-spacing: -.045em; text-transform: uppercase; }
     .hero h1 em { font-style: normal; color: var(--cyan); }
+    /* spelled-out keyword / query inside the h1 — full heading weight, plain-language */
+    .hero h1 .h1-sub { display: block; margin-top: 18px; color: #b6cacf; font: 500 clamp(18px, 2vw, 26px)/1.25 var(--body); letter-spacing: -.01em; text-transform: none; }
     .hero p { max-width: 66ch; margin: 0 0 14px; color: #b6cacf; font-size: clamp(15.5px, 1.1vw, 18px); line-height: 1.7; }
     .hero p:last-of-type { margin-bottom: 0; color: #7c979d; }
 
@@ -210,7 +212,7 @@
       .topbar, .toolbar, .hero::after, .foot-actions, .site-footer { display: none !important; }
       .hero { background: none; color: #000; border: 0; }
       .hero-inner { padding: 0 0 10px; }
-      .hero h1 { font-size: 26px; color: #000; } .hero h1 em { color: #000; }
+      .hero h1 { font-size: 26px; color: #000; } .hero h1 em { color: #000; } .hero h1 .h1-sub { display: none; }
       .hero p { color: #333; font-size: 11px; } .hero .eyebrow { color: #000; }
       body { background: #fff; font-size: 11px; }
       .wrap { padding: 6px 0; max-width: none; }
@@ -244,7 +246,7 @@
   <section class="hero">
     <div class="hero-inner">
       <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Buyer's tool</p>
-      <h1>SASE evaluation <em>checklist.</em></h1>
+      <h1>SASE evaluation <em>checklist.</em><span class="h1-sub">Compare SASE architectures before you talk to a vendor.</span></h1>
       <p>Check the requirements that matter to you. The matrix shows how each architecture type tends to meet them, so you can see which approach fits your needs before you talk to a single vendor. It assumes you want a complete SASE platform, so the standard features are listed as a baseline rather than scored.</p>
       <p>Everything stays in your browser, and the page prints as a comparison sheet you can take into demos and vendor calls.</p>
     </div>

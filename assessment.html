@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="An interactive, vendor-neutral SASE architecture assessment. Answer a few questions about your environment and get a personalized framework weighing cloud-PoP, customer-controlled, endpoint-native, and distributed enforcement. Runs entirely in your browser.">
   <meta name="theme-color" content="#06121b">
-  <title>SASE Architecture Assessment</title>
+  <title>SASE Assessment: Which SASE Architecture Fits Your Environment? | SASE.net</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
@@ -97,6 +97,8 @@
     .eyebrow .dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--cyan); vertical-align: middle; }
     .hero h1 { max-width: 18ch; margin: 0 0 22px; font: 600 clamp(42px, 6.6vw, 96px)/.88 var(--display); letter-spacing: -.045em; text-transform: uppercase; }
     .hero h1 em { font-style: normal; color: var(--cyan); }
+    /* spelled-out keyword / query inside the h1 — full heading weight, plain-language */
+    .hero h1 .h1-sub { display: block; margin-top: 18px; color: #b6cacf; font: 500 clamp(18px, 2vw, 26px)/1.25 var(--body); letter-spacing: -.01em; text-transform: none; }
     .hero p { max-width: 62ch; margin: 0 0 14px; color: #b6cacf; font-size: clamp(15.5px, 1.1vw, 18px); line-height: 1.7; }
     .hero p:last-of-type { margin-bottom: 0; color: #7c979d; }
     .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 26px; margin-top: 34px; }
@@ -349,7 +351,7 @@
   <section class="hero" id="hero">
     <div class="hero-inner">
       <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Interactive tool</p>
-      <h1>SASE architecture <em>assessment.</em></h1>
+      <h1>SASE architecture <em>assessment.</em><span class="h1-sub">Find the SASE architecture that fits your environment.</span></h1>
       <p>Seven quick questions across four short stages: your users and sites, your traffic and data, resilience, and operations. In return, a neutral, personalized framework for weighing the four ways SASE enforcement can be delivered: cloud-PoP, customer-controlled, endpoint-native, and distributed.</p>
       <p>No sign-up. Everything runs in your browser, so your answers never leave this page.</p>
       <div class="hero-actions">
